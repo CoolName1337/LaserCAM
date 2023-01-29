@@ -1,0 +1,30 @@
+﻿<Window x:Class="LaserCAM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LaserCAM"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition ></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="10*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="2*" MinWidth="70"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Gost Type B">G-код</Label>
+        <TextBox Name="GCodeTextBox" Grid.Row="1" Grid.Column="3"></TextBox>
+        <Button Name="GCodeCreateButton" Grid.Row="2" Grid.Column="3" Content="Создать" FontFamily="Gost Type B"></Button>
+
+        <GridSplitter Grid.Column="2" Grid.RowSpan="3" Width="3"
+        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+    </Grid>
+</Window>
