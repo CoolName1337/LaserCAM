@@ -5,26 +5,146 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LaserCAM"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="LaserCAM" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Gost Type B" />
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Gost Type B" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Gost Type B" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontFamily" Value="Gost Type B" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="8*"></RowDefinition>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="10*"></ColumnDefinition>
+            <ColumnDefinition Width="50" ></ColumnDefinition>
+            <ColumnDefinition Width="319*"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
-            <ColumnDefinition Width="2*" MinWidth="70"></ColumnDefinition>
+            <ColumnDefinition Width="53*" MinWidth="70"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Grid.Column="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Gost Type B">G-код</Label>
-        <TextBox Name="GCodeTextBox" Grid.Row="1" Grid.Column="3"></TextBox>
-        <Button Name="GCodeCreateButton" Grid.Row="2" Grid.Column="3" Content="Создать" FontFamily="Gost Type B"></Button>
+        <Menu VerticalAlignment="Top" Grid.ColumnSpan="4" Grid.Row="0">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать..."></MenuItem>
+                <MenuItem Header="Открыть..."></MenuItem>
+                <MenuItem Header="Сохранить"></MenuItem>
+                <MenuItem Header="Сохранить как..."></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Редактировать">
+                <MenuItem Header="Назад"></MenuItem>
+                <MenuItem Header="Вперед"></MenuItem>
+                <Separator/>
+                <MenuItem Header="Параметры..."></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Инструменты">
+                <MenuItem Header="..."></MenuItem>
+                <MenuItem Header="..."></MenuItem>
+                <MenuItem Header="..."></MenuItem>
+                <MenuItem Header="..."></MenuItem>
+            </MenuItem>
+        </Menu>
 
-        <GridSplitter Grid.Column="2" Grid.RowSpan="3" Width="3"
+        <Label Grid.Row="1" Grid.Column="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">G-код</Label>
+        <TextBox Name="GCodeTextBox" Grid.Row="2" Grid.Column="3" TextWrapping="Wrap"></TextBox>
+        <Button Name="GCodeCreateButton" Grid.Row="3" Grid.Column="3" FontSize="20" Content="Создать"></Button>
+
+        <GridSplitter Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Width="3"
         HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+
+        <Border Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1"
+                Background="White" VerticalAlignment="Bottom" MaxWidth="150" MaxHeight="150" Width="150" Height="150">
+            <Grid Name="ParamsContainer">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="4*"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.ColumnSpan="4" Content="Создание" FontSize="20" HorizontalAlignment="Center"></Label>
+                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="10">W:</TextBlock>
+                <TextBox  Grid.Row="2" Grid.Column="1" ></TextBox>
+                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Padding="10">H:</TextBlock>
+                <TextBox  Grid.Row="2" Grid.Column="3" ></TextBox>
+                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="10">X:</TextBlock>
+                <TextBox  Grid.Row="3" Grid.Column="1" ></TextBox>
+                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Padding="10">Y:</TextBlock>
+                <TextBox  Grid.Row="3" Grid.Column="3" ></TextBox>
+            </Grid>
+        </Border>
+
+        <Canvas Name="mainCanvas" Background="AntiqueWhite" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Panel.ZIndex="-5"
+                MouseWheel="Grid_MouseWheel" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" >
+            <Canvas Name="canvasField" Height="auto" Width="auto">
+                <Ellipse Canvas.Bottom="120" Canvas.Left="300" Width="200" Height="200" StrokeThickness="1" Stroke="Black"></Ellipse>
+                <Ellipse Canvas.Bottom="-100" Canvas.Left="100" Width="200" Height="300" StrokeThickness="1" Stroke="Black"></Ellipse>
+            </Canvas>
+        </Canvas>
+
+        <Border Background="White" Grid.Row="4" Grid.ColumnSpan="2" ></Border>
+        <Border Background="White" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Panel.ZIndex="-1"></Border>
+
+        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="1"
+                Background="White" VerticalAlignment="Top" MaxWidth="150" MaxHeight="150" Width="150" Height="150">
+            <Grid Name="ViewContainer">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="20">Вид</Label>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0">X:</TextBlock>
+                <TextBox Name="XTextBox" Grid.Row="2" Grid.Column="1"></TextBox>
+                <TextBlock Grid.Row="2" Grid.Column="2" Padding="10 0">Y:</TextBlock>
+                <TextBox Name="YTextBox" Grid.Row="2" Grid.Column="3"></TextBox>
+
+                <TextBlock Name="scaleTextBlock" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">100%</TextBlock>
+                <Slider Name="scaleSlider" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" 
+                        ValueChanged="scaleSlider_ValueChanged" Margin="10 5" Value="100" Minimum="10" Maximum="300"></Slider>
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="1" Grid.RowSpan="2">
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="none">
+                <Polyline Stroke="Black" StrokeThickness="1" Points="0,0 18,21 7,21 7,21 0,30 0,0"></Polyline>
+            </Button>
+            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="line">
+                <Line Stroke="Black" StrokeThickness="1" X1="0" X2="30" Y1="0" Y2="30"></Line>
+            </Button>
+            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="ellipse">
+                <Ellipse Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Ellipse>
+            </Button>
+            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="rectangle">
+                <Rectangle Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Rectangle>
+            </Button>
+        </StackPanel>
 
     </Grid>
 </Window>
