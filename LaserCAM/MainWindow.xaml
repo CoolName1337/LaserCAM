@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:LaserCAM"
         mc:Ignorable="d"
-        Title="LaserCAM" Height="450" Width="800">
+        Title="LaserCAM" Height="450" Width="800"
+        PreviewKeyDown="Window_KeyDown">
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Gost Type B" />
@@ -63,39 +64,14 @@
         <GridSplitter Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Width="3"
         HorizontalAlignment="Center" VerticalAlignment="Stretch" />
 
-        <Border Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1"
+        <Border Name="ParamsContainer" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left" BorderBrush="Gray" BorderThickness="1"
                 Background="White" VerticalAlignment="Bottom" MaxWidth="150" MaxHeight="150" Width="150" Height="150">
-            <Grid Name="ParamsContainer">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="4*"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <Label Grid.ColumnSpan="4" Content="Создание" FontSize="20" HorizontalAlignment="Center"></Label>
-                <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Padding="10">W:</TextBlock>
-                <TextBox  Grid.Row="2" Grid.Column="1" ></TextBox>
-                <TextBlock Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" Padding="10">H:</TextBlock>
-                <TextBox  Grid.Row="2" Grid.Column="3" ></TextBox>
-                <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Padding="10">X:</TextBlock>
-                <TextBox  Grid.Row="3" Grid.Column="1" ></TextBox>
-                <TextBlock Grid.Row="3" Grid.Column="2" VerticalAlignment="Center" Padding="10">Y:</TextBlock>
-                <TextBox  Grid.Row="3" Grid.Column="3" ></TextBox>
-            </Grid>
+            
         </Border>
 
         <Canvas Name="mainCanvas" Background="AntiqueWhite" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Panel.ZIndex="-5"
-                MouseWheel="Grid_MouseWheel" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp" >
+                MouseWheel="Grid_MouseWheel" MouseDown="Grid_MouseDown" MouseMove="Grid_MouseMove" MouseUp="Grid_MouseUp">
             <Canvas Name="canvasField" Height="auto" Width="auto">
-                <Ellipse Canvas.Bottom="120" Canvas.Left="300" Width="200" Height="200" StrokeThickness="1" Stroke="Black"></Ellipse>
-                <Ellipse Canvas.Bottom="-100" Canvas.Left="100" Width="200" Height="300" StrokeThickness="1" Stroke="Black"></Ellipse>
             </Canvas>
         </Canvas>
 
@@ -121,9 +97,9 @@
                 <Label Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="20">Вид</Label>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0">X:</TextBlock>
-                <TextBox Name="XTextBox" Grid.Row="2" Grid.Column="1"></TextBox>
+                <TextBlock Name="XTextBlock" Grid.Row="2" Grid.Column="1"></TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="2" Padding="10 0">Y:</TextBlock>
-                <TextBox Name="YTextBox" Grid.Row="2" Grid.Column="3"></TextBox>
+                <TextBlock Name="YTextBlock" Grid.Row="2" Grid.Column="3"></TextBlock>
 
                 <TextBlock Name="scaleTextBlock" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">100%</TextBlock>
                 <Slider Name="scaleSlider" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" 
@@ -131,7 +107,7 @@
             </Grid>
         </Border>
 
-        <StackPanel Grid.Row="1" Grid.RowSpan="2">
+        <StackPanel Name="ToolsContainer" Grid.Row="1" Grid.RowSpan="2">
             <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="none">
                 <Polyline Stroke="Black" StrokeThickness="1" Points="0,0 18,21 7,21 7,21 0,30 0,0"></Polyline>
             </Button>

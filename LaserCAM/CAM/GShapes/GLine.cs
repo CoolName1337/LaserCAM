@@ -6,18 +6,8 @@ namespace LaserCAM.CAM.GShapes
 {
     public class GLine : GShape
     {
-        public GLine(Line line = null)
-        {
-            if(line == null)
-            {
-                Shape = new Line() { Stroke = GTool.BlackBrush };
-            }
-            else
-            {
-                line.Stroke = GTool.BlackBrush;
-                Shape = line;
-            }
-        }
+        public GLine(Line line) : base(line) { }
+        public GLine() : base(new Line() { Stroke = GTool.BlackBrush, StrokeThickness = 1 }) { }
         public override string ToGCode()
         {
             return $"G01 ";

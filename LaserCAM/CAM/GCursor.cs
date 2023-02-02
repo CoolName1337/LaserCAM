@@ -1,5 +1,4 @@
-﻿using LaserCAM.CAM.GShapes;
-using LaserCAM.CAM.GTools;
+﻿using LaserCAM.CAM.GTools;
 using System.Windows;
 
 namespace LaserCAM.CAM
@@ -23,18 +22,27 @@ namespace LaserCAM.CAM
 
     public static class GCursor
     {
-        public static GTool SelectedTool { get; set; }
+        private static GTool _selectedTool;
+        public static GTool SelectedTool
+        {
+            get => _selectedTool; 
+            set
+            {
+                _selectedTool?.RemoveShape();
+                _selectedTool = value;
+            }
+        }
         private static Point _position;
         public static Point Position
         {
-            get => _position; 
+            get => _position;
             set
             {
                 _position = (value - (Vector)GField.Position).Divide(GField.KSize);
             }
         }
 
-        
+
 
     }
 }
