@@ -38,10 +38,9 @@
 
         <Menu VerticalAlignment="Top" Grid.ColumnSpan="4" Grid.Row="0">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать..."></MenuItem>
-                <MenuItem Header="Открыть..."></MenuItem>
-                <MenuItem Header="Сохранить"></MenuItem>
-                <MenuItem Header="Сохранить как..."></MenuItem>
+                <MenuItem Header="Создать..." Click="CreateNew_Click"></MenuItem>
+                <MenuItem Header="Открыть..." Click="OpenFile_Click"></MenuItem>
+                <MenuItem Header="Сохранить как..." Click="SaveFile_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Редактировать">
                 <MenuItem Header="Назад"></MenuItem>
@@ -78,9 +77,19 @@
         <Border Background="White" Grid.Row="4" Grid.ColumnSpan="2" ></Border>
         <Border Background="White" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Panel.ZIndex="-1"></Border>
 
-        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="1"
+
+        <Border x:Name="StartMask" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Panel.ZIndex="10" Background="White">
+            <Grid>
+                <Line Stroke="Red" StrokeThickness="20" X1="0" Y1="0" X2="500" Y2="100" HorizontalAlignment="Center" VerticalAlignment="Center"></Line>
+                <TextBlock FontFamily="Gost Type B" Foreground="DarkSlateBlue" FontSize="90" VerticalAlignment="Center" HorizontalAlignment="Center" >LaserCAM</TextBlock>
+            </Grid>
+            
+        </Border>
+        
+        
+        <Border Name="ViewContainer" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="1"
                 Background="White" VerticalAlignment="Top" MaxWidth="150" MaxHeight="150" Width="150" Height="150">
-            <Grid Name="ViewContainer">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
@@ -108,7 +117,7 @@
         </Border>
 
         <StackPanel Name="ToolsContainer" Grid.Row="1" Grid.RowSpan="2">
-            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="none">
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="cursor">
                 <Polyline Stroke="Black" StrokeThickness="1" Points="0,0 18,21 7,21 7,21 0,30 0,0"></Polyline>
             </Button>
             <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="line">

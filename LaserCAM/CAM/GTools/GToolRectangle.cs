@@ -38,7 +38,7 @@ namespace LaserCAM.CAM.GTools
                 point1 = Cursor;
                 _rectangle.Width = 0;
                 _rectangle.Height = 0;
-                Canvas.SetTop(_rectangle, Cursor.Y);
+                Canvas.SetBottom(_rectangle, Cursor.Y);
                 Canvas.SetLeft(_rectangle, Cursor.X);
                 GField.Panel.Children.Add(_rectangle);
                 ClicksCount++;
@@ -53,7 +53,7 @@ namespace LaserCAM.CAM.GTools
             _rectangle.Width = Math.Abs(point2.X);
 
             if (point2.Y < 0)
-                Canvas.SetTop(_rectangle, Cursor.Y);
+                Canvas.SetBottom(_rectangle, Cursor.Y);
             if (point2.X < 0)
                 Canvas.SetLeft(_rectangle, Cursor.X);
         }
@@ -98,7 +98,7 @@ namespace LaserCAM.CAM.GTools
                     _rectangle.Width = Math.Abs(point2.X);
 
                     if (point2.Y < 0)
-                        Canvas.SetTop(_rectangle, Cursor.Y);
+                        Canvas.SetBottom(_rectangle, Cursor.Y);
                     if (point2.X < 0)
                         Canvas.SetLeft(_rectangle, Cursor.X);
                     textBox.BorderBrush = GrayBrush;

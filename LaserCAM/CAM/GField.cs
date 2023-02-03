@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LaserCAM.CAM.GShapes;
+using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -7,17 +9,33 @@ namespace LaserCAM.CAM
 {
     public static class GField
     {
+        public static Panel MainPanel { get; set; }
+
+        public static List<GShape> AllShapes { get; set; } = new();
+
+        private static GSample _gSample;
+        public static GSample Sample
+        {
+            get => _gSample; 
+            set
+            {
+                Sample?.Remove();
+                _gSample = value;
+            }
+        }
+
         private static double scaleStep = 1 / 10d;
         private static double kSize = 1;
         public static double KSize
         {
-            get => kSize; 
+            get => kSize;
             set
             {
                 kSize = value < 0.3 ? 0.3 : value > 3 ? 3 : value;
                 kSize = Math.Round(kSize, 1);
                 if (Panel != null)
                     Panel.RenderTransform = new ScaleTransform(kSize, kSize);
+
             }
         }
         public static Point Position
@@ -51,9 +69,28 @@ namespace LaserCAM.CAM
         {
             var delta = PastPos - point;
 
-            Position -= new Vector(delta.X, delta.Y);
+            if (Sample != null)
+            {
+                var futurePoint = Position - delta;
+
+                if (futurePoint.X > Sample.Position.X + MainPanel.ActualWidth ||
+                    futurePoint.X < Sample.Position.X)
+                    delta.X = 0;
+                if (futurePoint.Y > Sample.Position.Y + MainPanel.ActualHeight ||
+                    futurePoint.Y < Sample.Position.Y)
+                    delta.Y = 0;
+            }
+
+
+            Position -= delta;
 
             PastPos = point;
+        }
+
+        public static void Clear()
+        {
+            AllShapes.ForEach(shape => shape.Remove());
+            AllShapes = new();
         }
 
     }

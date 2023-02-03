@@ -1,4 +1,6 @@
 ﻿using LaserCAM.CAM.GShapes;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
@@ -27,8 +29,8 @@ namespace LaserCAM.CAM.GTools
             else
             {
                 GField.Panel.Children.Add(_line);
-                _line.X1 = _line.X2 = GCursor.Position.X;
-                _line.Y1 = _line.Y2 = GCursor.Position.Y;
+                _line.X1 = _line.X2 = Cursor.X;
+                _line.Y1 = _line.Y2 = -Cursor.Y;
                 ClicksCount++;
             }
         }
@@ -41,17 +43,59 @@ namespace LaserCAM.CAM.GTools
 
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
-            _line.X2 = GCursor.Position.X;
-            _line.Y2 = GCursor.Position.Y;
+            _line.X2 = Cursor.X;
+            _line.Y2 = -Cursor.Y;
         }
         public override void RemoveShape()
         {
             GField.Panel.Children.Remove(_line);
         }
 
+
+        public override void SetParamWindow()
+        {
+            base.SetParamWindow();
+
+            if (ParamsWindow.Child is Grid gr)
+            {
+                List<FrameworkElement> elems = new();
+                foreach (FrameworkElement el in gr.Children)
+                {
+                    if (el is TextBox && (el.Tag == "h" || el.Tag == "w"))
+                        elems.Add(el);
+                    if (el is TextBlock tb && (tb.Text.StartsWith("W") || tb.Text.StartsWith("H")))
+                        elems.Add(el);
+                }
+                foreach (var el in elems)
+                {
+                    gr.Children.Remove(el);
+                }
+            }
+
+        }
+
         public override void SetParams()
         {
+            foreach (TextBox textBox in ParamInputs)
+            {
+                if (double.TryParse(textBox.Text, out double res))
+                {
+                    if(ClicksCount > 0)
+                    {
+                        _line.X2 = Cursor.X;
+                        _line.Y2 = -Cursor.Y;
+                    }
+                    else
+                    {
+                        _line.X1 = Cursor.X;
+                        _line.Y1 = -Cursor.Y;
+                    }
 
+                    textBox.BorderBrush = GrayBrush;
+                }
+                else
+                    textBox.BorderBrush = RedBrush;
+            }
         }
     }
 }

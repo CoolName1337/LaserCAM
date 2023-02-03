@@ -34,7 +34,7 @@ namespace LaserCAM.CAM.GTools
 
         public override void OnMouseMove(object sender, MouseEventArgs e)
         {
-            Canvas.SetTop(_ellipse, GCursor.Position.Y - _ellipse.Height / 2);
+            Canvas.SetBottom(_ellipse, GCursor.Position.Y - _ellipse.Height / 2);
             Canvas.SetLeft(_ellipse, GCursor.Position.X - _ellipse.Width / 2);
         }
 
@@ -57,7 +57,7 @@ namespace LaserCAM.CAM.GTools
                             Canvas.SetLeft(_ellipse, res - _ellipse.Width / 2);
                             break;
                         case "y":
-                            Canvas.SetTop(_ellipse, res - _ellipse.Height / 2);
+                            Canvas.SetBottom(_ellipse, res - _ellipse.Height / 2);
                             break;
                     }
                     textBox.BorderBrush = GrayBrush;

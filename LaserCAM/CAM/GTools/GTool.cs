@@ -41,6 +41,7 @@ namespace LaserCAM.CAM.GTools
         public static Brush GrayBrush { get => new SolidColorBrush(Colors.Gray); }
         public static Brush BlackBrush { get => new SolidColorBrush(Colors.Black); }
         public static Brush RedBrush { get => new SolidColorBrush(Colors.Red); }
+        public static Brush BlueBrush { get => new SolidColorBrush(Colors.DarkBlue); }
 
         public virtual void OnMouseDown(object sender, MouseButtonEventArgs e) { }
         public virtual void OnLeftMouseDown() { }

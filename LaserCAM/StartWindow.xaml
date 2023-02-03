@@ -1,0 +1,47 @@
+﻿<Window x:Class="LaserCAM.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LaserCAM"
+        mc:Ignorable="d"
+        Title="Создание заготовки" Height="350" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Canvas x:Name="canvas" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2"  Grid.RowSpan="5" Background="AntiqueWhite">
+            <Rectangle x:Name="sampleRectangle" Stroke="DarkBlue" StrokeThickness="1"/>
+        </Canvas>
+
+        <Rectangle Grid.ColumnSpan="2" Grid.RowSpan="5" Fill="White" StrokeThickness="0"></Rectangle>
+        
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Ширина</TextBlock>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" FontSize="20">Высота</TextBlock>
+        <TextBox x:Name="widthInput" Grid.Row="1" Height="20" Margin="20 0" TextChanged="input_TextChanged" PreviewTextInput="input_PreviewTextInput" Tag="w"></TextBox>
+        <TextBox x:Name="heightInput" Grid.Row="1" Grid.Column="1" Height="20" Margin="20 0" TextChanged="input_TextChanged" PreviewTextInput="input_PreviewTextInput" Tag="h"></TextBox>
+
+        <ComboBox Grid.Row="2" Grid.ColumnSpan="2" Height="20" Margin="20 0" SelectionChanged="ComboBox_SelectionChanged">
+            <TextBlock>A6</TextBlock>
+            <TextBlock>A5</TextBlock>
+            <TextBlock>A4</TextBlock>
+            <TextBlock>A3</TextBlock>
+            <TextBlock>A2</TextBlock>
+            <TextBlock>A1</TextBlock>
+            <TextBlock>A0</TextBlock>
+        </ComboBox>
+        
+        <Button Grid.Row="4" Background="Lime" Margin="10" Foreground="White" FontSize="20" BorderThickness="0" Click="Create_Click">Создать</Button>
+        <Button Grid.Row="4" Grid.Column="1" Background="Gray" Margin="10" Foreground="White" FontSize="20" BorderThickness="0" Click="Cancel_Click">Отмена</Button>
+    </Grid>
+</Window>
