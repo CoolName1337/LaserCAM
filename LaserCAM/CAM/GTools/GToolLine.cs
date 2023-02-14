@@ -12,7 +12,7 @@ namespace LaserCAM.CAM.GTools
         Line _line;
         public override void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed) 
+            if(e.ChangedButton == MouseButton.Left) 
             {
                 OnLeftMouseDown();
             }
@@ -61,9 +61,9 @@ namespace LaserCAM.CAM.GTools
                 List<FrameworkElement> elems = new();
                 foreach (FrameworkElement el in gr.Children)
                 {
-                    if (el is TextBox && (el.Tag == "h" || el.Tag == "w"))
+                    if (el is TextBox && el.Tag == "d")
                         elems.Add(el);
-                    if (el is TextBlock tb && (tb.Text.StartsWith("W") || tb.Text.StartsWith("H")))
+                    if (el is TextBlock tb && tb.Text.StartsWith("D"))
                         elems.Add(el);
                 }
                 foreach (var el in elems)
@@ -76,26 +76,17 @@ namespace LaserCAM.CAM.GTools
 
         public override void SetParams()
         {
-            foreach (TextBox textBox in ParamInputs)
+            if(ClicksCount > 0)
             {
-                if (double.TryParse(textBox.Text, out double res))
-                {
-                    if(ClicksCount > 0)
-                    {
-                        _line.X2 = Cursor.X;
-                        _line.Y2 = -Cursor.Y;
-                    }
-                    else
-                    {
-                        _line.X1 = Cursor.X;
-                        _line.Y1 = -Cursor.Y;
-                    }
-
-                    textBox.BorderBrush = GrayBrush;
-                }
-                else
-                    textBox.BorderBrush = RedBrush;
+                _line.X2 = Cursor.X;
+                _line.Y2 = -Cursor.Y;
             }
+            else
+            {
+                _line.X1 = Cursor.X;
+                _line.Y1 = -Cursor.Y;
+            }
+
         }
     }
 }

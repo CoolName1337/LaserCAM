@@ -1,5 +1,4 @@
 ﻿using LaserCAM.CAM.GShapes;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Shapes;
@@ -20,7 +19,7 @@ namespace LaserCAM.CAM.GTools
 
         public override void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.ChangedButton == MouseButton.Left)
             {
                 OnLeftMouseDown();
             }
@@ -41,30 +40,9 @@ namespace LaserCAM.CAM.GTools
 
         public override void SetParams()
         {
-            foreach (TextBox textBox in ParamInputs)
-            {
-                if (double.TryParse(textBox.Text, out double res))
-                {
-                    switch (textBox.Tag)
-                    {
-                        case "w":
-                            _ellipse.Width = res;
-                            break;
-                        case "h":
-                            _ellipse.Height = res;
-                            break;
-                        case "x":
-                            Canvas.SetLeft(_ellipse, res - _ellipse.Width / 2);
-                            break;
-                        case "y":
-                            Canvas.SetBottom(_ellipse, res - _ellipse.Height / 2);
-                            break;
-                    }
-                    textBox.BorderBrush = GrayBrush;
-                }
-                else
-                    textBox.BorderBrush = RedBrush;
-            }
+            _ellipse.Width = _ellipse.Height = ParamValues["d"]; 
+            Canvas.SetLeft(_ellipse, Cursor.X - _ellipse.Width / 2);
+            Canvas.SetBottom(_ellipse, Cursor.Y - _ellipse.Height / 2);
         }
 
         public override void RemoveShape()

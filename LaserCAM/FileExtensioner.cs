@@ -70,5 +70,11 @@ namespace LaserCAM
             GField.AllShapes.ForEach(shape => shape.Create());
         }
 
+        public static string GenerateGCode()
+        {
+            string res = string.Join("\n", GField.AllShapes.Select(s => s.ToGCode()));
+            return GParams.GetResult(res);
+        }
+
     }
 }

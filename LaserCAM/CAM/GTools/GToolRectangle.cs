@@ -18,7 +18,7 @@ namespace LaserCAM.CAM.GTools
         }
         public override void OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.ChangedButton == MouseButton.Left)
             {
                 OnLeftMouseDown();
             }
@@ -73,9 +73,9 @@ namespace LaserCAM.CAM.GTools
                 List<FrameworkElement> elems = new();
                 foreach (FrameworkElement el in gr.Children)
                 {
-                    if(el is TextBox && (el.Tag == "h" || el.Tag == "w"))
+                    if(el is TextBox && el.Tag == "d")
                         elems.Add(el);
-                    if(el is TextBlock tb && (tb.Text.StartsWith("W") || tb.Text.StartsWith("H")))
+                    if(el is TextBlock tb && tb.Text.StartsWith("D"))
                         elems.Add(el);
                 }
                 foreach (var el in elems)
@@ -88,24 +88,15 @@ namespace LaserCAM.CAM.GTools
 
         public override void SetParams()
         {
-            foreach (TextBox textBox in ParamInputs)
-            {
-                if (double.TryParse(textBox.Text, out double res))
-                {
-                    var point2 = Cursor - point1;
+            var point2 = Cursor - point1;
 
-                    _rectangle.Height = Math.Abs(point2.Y);
-                    _rectangle.Width = Math.Abs(point2.X);
+            _rectangle.Height = Math.Abs(point2.Y);
+            _rectangle.Width = Math.Abs(point2.X);
 
-                    if (point2.Y < 0)
-                        Canvas.SetBottom(_rectangle, Cursor.Y);
-                    if (point2.X < 0)
-                        Canvas.SetLeft(_rectangle, Cursor.X);
-                    textBox.BorderBrush = GrayBrush;
-                }
-                else
-                    textBox.BorderBrush = RedBrush;
-            }
+            if (point2.Y < 0)
+                Canvas.SetBottom(_rectangle, Cursor.Y);
+            if (point2.X < 0)
+                Canvas.SetLeft(_rectangle, Cursor.X);
         }
     }
 }

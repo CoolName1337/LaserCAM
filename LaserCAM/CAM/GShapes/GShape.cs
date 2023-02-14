@@ -1,30 +1,49 @@
 ﻿using LaserCAM.CAM.GTools;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace LaserCAM.CAM.GShapes
 {
+
     public abstract class GShape
     {
         public Shape Shape;
         public GShape(Shape shape)
         {
-            shape.Stroke = GTool.BlackBrush;
-            Shape = shape;
-            GField.Panel.Children.Remove(shape);
-            GField.AllShapes.Add(this);
+            if(shape != null)
+            {
+                shape.Stroke = GTool.BlackBrush;
+                Shape = shape;
+                GField.Panel.Children.Remove(shape);
+            }
         }
         public abstract string ToGCode();
         public virtual void Create()
         {
             Shape.DataContext = this;
-            GField.Panel.Children.Add(Shape);
+            GField.AddShape(this);
         }
         public virtual void Remove()
         {
-            Shape.DataContext = this;
             GField.Panel.Children.Remove(Shape);
+        }
+
+        /// <summary>
+        /// Affects only on color
+        /// </summary>
+        public virtual void Select()
+        {
+            Shape.Stroke = new SolidColorBrush(Colors.Red);
+        }
+
+        /// <summary>
+        /// Affects only on color
+        /// </summary>
+        public virtual void Unselect()
+        {
+            Shape.Stroke = new SolidColorBrush(Colors.Black);
         }
 
         public abstract string ToSerialize();

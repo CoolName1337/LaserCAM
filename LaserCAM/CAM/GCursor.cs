@@ -1,27 +1,11 @@
 ﻿using LaserCAM.CAM.GTools;
+using LaserCAM.Extensions;
 using System;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace LaserCAM.CAM
 {
-
-    public static class PointExsteder
-    {
-        public static Point Multiply(this Point p, double d)
-        {
-            p.X *= d;
-            p.Y *= d;
-            return p;
-        }
-        public static Point Divide(this Point p, double d)
-        {
-            p.X /= d;
-            p.Y /= d;
-            return p;
-        }
-    }
 
     public static class GCursor
     {
@@ -40,7 +24,8 @@ namespace LaserCAM.CAM
                     GField.Panel.Children.Add(verticalLine);
                     GField.Panel.Children.Add(horizontalLine);
                 }
-                else{
+                else
+                {
                     GField.Panel.Children.Remove(verticalLine);
                     GField.Panel.Children.Remove(horizontalLine);
                 }
@@ -50,14 +35,28 @@ namespace LaserCAM.CAM
         private static GTool _selectedTool;
         public static GTool SelectedTool
         {
-            get => _selectedTool; 
+            get => _selectedTool;
             set
             {
                 _selectedTool?.RemoveShape();
                 _selectedTool = value;
             }
         }
+
+        private static double _step = 0.01;
+        public static double Step
+        {
+            get => _step;
+            set => _step = value > 0.01 ? value : 0.01;
+        }
+
+        public static bool UseStep { get; set; } = false;
+
         private static Point _position;
+
+        /// <summary>
+        /// Specially for shape positioning
+        /// </summary>
         public static Point Position
         {
             get => _position;
@@ -66,7 +65,13 @@ namespace LaserCAM.CAM
                 // Set calculated position
 
                 var point = (new Point(-GField.Position.X, GField.Position.Y) - new Vector(-value.X, value.Y)).Divide(GField.KSize);
-                _position = new Point(Math.Round(point.X,2), Math.Round(point.Y,2));
+
+                _position = new Point(Math.Round(point.X, 2), Math.Round(point.Y, 2));
+                if (UseStep || Step == 0.01)
+                    _position = new Point(
+                        _position.X + GPoint.Position.X % Step - _position.X % Step, 
+                        _position.Y + GPoint.Position.Y % Step - _position.Y % Step
+                        );
 
                 // Set position for aim
 
@@ -82,7 +87,13 @@ namespace LaserCAM.CAM
 
             }
         }
-
+        /// <summary>
+        /// Specially for outputs (for textBoxes, for results and etc)
+        /// </summary>
+        public static Point RelativePosition
+        {
+            get => (Point)(Position - GPoint.Position);
+        }
 
     }
 }

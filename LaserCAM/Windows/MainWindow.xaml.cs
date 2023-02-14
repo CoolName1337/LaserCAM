@@ -2,7 +2,7 @@
 using LaserCAM.CAM.GTools;
 using Microsoft.Win32;
 using System;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,6 +12,9 @@ namespace LaserCAM
 {
     public partial class MainWindow : Window
     {
+
+        public static RoutedCommand ReturnCommand = new RoutedCommand();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +26,14 @@ namespace LaserCAM
             GField.MainPanel = mainCanvas;
             GField.Panel = canvasField;
             GTool.ParamsWindow = ParamsContainer;
-            UnsetSample();
+
+            ReturnCommand.InputGestures.Add(new KeyGesture(Key.Z, ModifierKeys.Control));
+        }
+
+        private void ClearTool()
+        {
+            SelectButton(ToolsContainer.Children[0] as Button);
+            GCursor.SelectedTool = new GToolCursor();
         }
 
         public void SetSample(double w, double h, Point ZeroPoint = new Point())
@@ -32,12 +42,15 @@ namespace LaserCAM
             GField.Sample = new GSample(w, h);
             GPoint.IsActive = true;
             GPoint.Position = ZeroPoint;
-            GField.MoveCanvas(new Point(mainCanvas.ActualWidth / 2, mainCanvas.ActualHeight/2));
+            GField.MoveCanvas(new Point(mainCanvas.ActualWidth / 2, mainCanvas.ActualHeight / 2));
 
             ViewContainer.Visibility = Visibility.Visible;
             ToolsContainer.Visibility = Visibility.Visible;
             ParamsContainer.Visibility = Visibility.Visible;
+            FieldParamsPanel.Visibility = Visibility.Visible;
             StartMask.Visibility = Visibility.Hidden;
+
+            ClearTool();
         }
 
         public void UnsetSample()
@@ -46,8 +59,10 @@ namespace LaserCAM
             ViewContainer.Visibility = Visibility.Hidden;
             ToolsContainer.Visibility = Visibility.Hidden;
             ParamsContainer.Visibility = Visibility.Hidden;
+            FieldParamsPanel.Visibility = Visibility.Hidden;
             StartMask.Visibility = Visibility.Visible;
             GPoint.IsActive = false;
+            GGrid.IsActive = false;
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -81,8 +96,8 @@ namespace LaserCAM
             var mousePos = e.GetPosition(mainCanvas);
             GCursor.Position = mousePos;
 
-            XTextBlock.Text = GCursor.Position.X.ToString();
-            YTextBlock.Text = GCursor.Position.Y.ToString();
+            XTextBlock.Text = GCursor.RelativePosition.X.ToString();
+            YTextBlock.Text = GCursor.RelativePosition.Y.ToString();
 
             if (GTool.ParamsWindow.Child is Grid gr)
             {
@@ -91,9 +106,9 @@ namespace LaserCAM
                     if (element is TextBox tb)
                     {
                         if (tb.Tag == "x")
-                            tb.Text = GCursor.Position.X.ToString();
+                            tb.Text = GCursor.RelativePosition.X.ToString();
                         if (tb.Tag == "y")
-                            tb.Text = GCursor.Position.Y.ToString();
+                            tb.Text = GCursor.RelativePosition.Y.ToString();
                     }
                 }
             }
@@ -115,6 +130,7 @@ namespace LaserCAM
                 switch (btn.Tag)
                 {
                     case "cursor":
+                        GCursor.SelectedTool = new GToolCursor();
                         break;
                     case "line":
                         GCursor.SelectedTool = new GToolLine();
@@ -125,6 +141,17 @@ namespace LaserCAM
                     case "rectangle":
                         GCursor.SelectedTool = new GToolRectangle();
                         break;
+                    case "image":
+                        var openFileDialog = new OpenFileDialog() { Filter = "Png |*.png|JPG|*.jpeg" };
+                        if (openFileDialog.ShowDialog() == true)
+                        {
+                            GCursor.SelectedTool = new GToolImage(openFileDialog.FileName);
+                        }
+                        else
+                        {
+                            ClearTool();
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -133,6 +160,7 @@ namespace LaserCAM
 
         private void SelectButton(Button btn)
         {
+            if (btn == null) return;
             foreach (Button toolBtn in ToolsContainer.Children)
                 toolBtn.Background = new SolidColorBrush(Colors.Transparent);
             btn.Background = new SolidColorBrush(Colors.WhiteSmoke);
@@ -144,7 +172,15 @@ namespace LaserCAM
             if (e.Key == Key.Space)
             {
                 GCursor.SelectedTool?.OnLeftMouseDown();
-                if (e.Source is TextBox tb) e.Handled = true;
+                e.Handled = true;
+            }
+            if(e.Key == Key.Delete)
+            {
+                GField.RemoveSelected();
+            }
+            if (e.Key == Key.O)
+            {
+                GPoint.Position = GCursor.Position;
             }
             if (GTool.ParamsWindow.Child is Grid gr)
             {
@@ -160,18 +196,13 @@ namespace LaserCAM
                             if (el.Tag == "y")
                                 el.Focus();
                         break;
-                    case Key.W:
+                    case Key.D:
                         foreach (FrameworkElement el in gr.Children)
-                            if (el.Tag == "w")
-                                el.Focus();
-                        break;
-                    case Key.H:
-                        foreach (FrameworkElement el in gr.Children)
-                            if (el.Tag == "h")
+                            if (el.Tag == "d")
                                 el.Focus();
                         break;
                     case Key.Escape:
-                        GCursor.SelectedTool = null;
+                        ClearTool();
                         break;
                 }
             }
@@ -199,6 +230,63 @@ namespace LaserCAM
             {
                 await FileExtensioner.SaveProject(saveFileDialog.FileName);
             }
+        }
+
+        private void GridParams_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox cb)
+            {
+                switch (cb.Tag)
+                {
+                    case "aim":
+                        GCursor.IsAim = cb.IsChecked ?? false;
+                        break;
+                    case "step":
+                        GCursor.UseStep = cb.IsChecked ?? false;
+                        break;
+                    case "grid":
+                        GGrid.IsActive = cb.IsChecked ?? false;
+                        break;
+                }
+            }
+        }
+
+        private void GCodeCreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (GField.AllShapes.Count > 0)
+            {
+                GCodeTextBox.Text = FileExtensioner.GenerateGCode();
+            }
+        }
+
+        private void StepSize_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if(sender is TextBox textBox)
+            {
+                if (!char.IsDigit(e.Text[0]) && e.Text != ",")
+                    e.Handled = true;
+            }
+        }
+
+        private void StepSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                if (double.TryParse(textBox.Text, out double res))
+                {
+                    GCursor.Step = res;
+                    textBox.BorderBrush = GTool.GrayBrush;
+                }
+                else
+                    textBox.BorderBrush = GTool.RedBrush;
+            }
+        }
+
+        private void ReturnCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var change = GField.Changes.LastOrDefault();
+            change?.Return();
+            GField.Changes.Remove(change);
         }
     }
 }

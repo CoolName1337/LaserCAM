@@ -16,13 +16,15 @@ namespace LaserCAM.CAM
 
                 verticalLine.X1 = verticalLine.X2 = _position.X;
 
-                verticalLine.Y1 = -GField.MainPanel.ActualHeight / GField.KSize + _position.Y;
-                verticalLine.Y2 = GField.MainPanel.ActualHeight / GField.KSize + _position.Y;
+                verticalLine.Y1 = GField.MainPanel.ActualHeight / GField.KSize - _position.Y;
+                verticalLine.Y2 = -GField.MainPanel.ActualHeight / GField.KSize - _position.Y;
 
-                horizontalLine.Y1 = horizontalLine.Y2 = _position.Y;
+                horizontalLine.Y1 = horizontalLine.Y2 = -_position.Y;
 
                 horizontalLine.X1 = -GField.MainPanel.ActualWidth / GField.KSize + _position.X;
                 horizontalLine.X2 = GField.MainPanel.ActualWidth / GField.KSize + _position.X;
+
+                GGrid.Reload();
             }
         }
 

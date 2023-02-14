@@ -22,12 +22,16 @@
         </Style>
     </Window.Resources>
 
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.ReturnCommand}" Executed="ReturnCommand_Executed"></CommandBinding>
+    </Window.CommandBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="8*"></RowDefinition>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50" ></ColumnDefinition>
@@ -57,8 +61,8 @@
         </Menu>
 
         <Label Grid.Row="1" Grid.Column="3" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center">G-код</Label>
-        <TextBox Name="GCodeTextBox" Grid.Row="2" Grid.Column="3" TextWrapping="Wrap"></TextBox>
-        <Button Name="GCodeCreateButton" Grid.Row="3" Grid.Column="3" FontSize="20" Content="Создать"></Button>
+        <TextBox Name="GCodeTextBox" Grid.Row="2" Grid.Column="3" TextWrapping="Wrap" IsReadOnly="True"></TextBox>
+        <Button Name="GCodeCreateButton" Grid.Row="3" Grid.Column="3" FontSize="20" Content="Создать" Click="GCodeCreateButton_Click"></Button>
 
         <GridSplitter Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Width="3"
         HorizontalAlignment="Center" VerticalAlignment="Stretch" />
@@ -77,15 +81,28 @@
         <Border Background="White" Grid.Row="4" Grid.ColumnSpan="2" ></Border>
         <Border Background="White" Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Panel.ZIndex="-1"></Border>
 
+        <TabControl Name="FieldParamsPanel" Grid.Row="4" Grid.ColumnSpan="2">
+            <TabItem Header="Поле">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="Шаг" Margin="0 0 20 0" Click="GridParams_Click" Tag="step"></CheckBox>
+                    <CheckBox Content="Сетка" Margin="0 0 20 0" Click="GridParams_Click" Tag="grid"></CheckBox>
+                    <CheckBox Content="Прицел" Margin="0 0 20 0" Click="GridParams_Click" Tag="aim"></CheckBox>
+                    <TextBlock Margin="0 0 4 0">Размер шага:</TextBlock>
+                    <TextBox Width="50" PreviewTextInput="StepSize_PreviewTextInput" TextChanged="StepSize_TextChanged"></TextBox>
+                </StackPanel>
+            </TabItem >
+            <TabItem Header="Привязка"></TabItem>
+        </TabControl>
 
-        <Border x:Name="StartMask" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Panel.ZIndex="10" Background="White">
+
+        <Border x:Name="StartMask" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="3" Panel.ZIndex="10" Background="White">
             <Grid>
                 <Line Stroke="Red" StrokeThickness="20" X1="0" Y1="0" X2="500" Y2="100" HorizontalAlignment="Center" VerticalAlignment="Center"></Line>
                 <TextBlock FontFamily="Gost Type B" Foreground="DarkSlateBlue" FontSize="90" VerticalAlignment="Center" HorizontalAlignment="Center" >LaserCAM</TextBlock>
             </Grid>
             
         </Border>
-        
+
         
         <Border Name="ViewContainer" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" HorizontalAlignment="Right" BorderBrush="Gray" BorderThickness="1"
                 Background="White" VerticalAlignment="Top" MaxWidth="150" MaxHeight="150" Width="150" Height="150">
@@ -112,7 +129,7 @@
 
                 <TextBlock Name="scaleTextBlock" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">100%</TextBlock>
                 <Slider Name="scaleSlider" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" 
-                        ValueChanged="scaleSlider_ValueChanged" Margin="10 5" Value="100" Minimum="10" Maximum="300"></Slider>
+                        ValueChanged="scaleSlider_ValueChanged" Margin="10 5" Value="100" Minimum="10" Maximum="400"></Slider>
             </Grid>
         </Border>
 
@@ -120,14 +137,22 @@
             <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="cursor">
                 <Polyline Stroke="Black" StrokeThickness="1" Points="0,0 18,21 7,21 7,21 0,30 0,0"></Polyline>
             </Button>
-            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="line">
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="line">
                 <Line Stroke="Black" StrokeThickness="1" X1="0" X2="30" Y1="0" Y2="30"></Line>
             </Button>
-            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="ellipse">
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="ellipse">
                 <Ellipse Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Ellipse>
             </Button>
-            <Button  Background="Transparent" Height="50" Click="ToolButton_Click" Tag="rectangle">
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="rectangle">
                 <Rectangle Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Rectangle>
+            </Button>
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="image">
+                <Grid>
+                    <Rectangle Stroke="Black" StrokeThickness="1" Width="40" Height="30"></Rectangle>
+                    <Polyline Stroke="Black" Points="1,20 25,15 39,20"
+                              StrokeEndLineCap="Round" StrokeStartLineCap="Round" ></Polyline>
+                    <Ellipse Width="5" Height="5" Stroke="Black" StrokeThickness="0.5" Margin="5,5,30,20"></Ellipse>
+                </Grid>
             </Button>
         </StackPanel>
 

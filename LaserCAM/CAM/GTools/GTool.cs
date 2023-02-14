@@ -16,26 +16,29 @@ namespace LaserCAM.CAM.GTools
             InitializeShape();
         }
         public static Border ParamsWindow { get; set; }
-        public static List<TextBox> ParamInputs
+        public static Dictionary<string, double> ParamValues
         {
             get
             {
-                List<TextBox> boxes = new();
+                var dict = new Dictionary<string, double>();
                 foreach (FrameworkElement el in (ParamsWindow.Child as Grid)?.Children)
-                    if (el is TextBox tb)
-                        boxes.Add(tb);
-                return boxes;
+                {
+                    if(el is TextBox tb)
+                    {
+                        if(double.TryParse(tb.Text, out double val))
+                            tb.BorderBrush = new SolidColorBrush(Colors.Gray);
+                        else
+                            tb.BorderBrush = new SolidColorBrush(Colors.Red);
+                        dict.Add(tb.Tag?.ToString(), val);
+                    }
+                }
+                return dict;
             }
         }
 
         public static Point Cursor
         {
-            get
-            {
-                if(double.TryParse(ParamInputs.Find(el => el.Tag == "x").Text, out double x)){ }
-                if(double.TryParse(ParamInputs.Find(el => el.Tag == "y").Text, out double y)){ }
-                return new Point(x, y);
-            }
+            get => new Point(ParamValues["x"] + GPoint.Position.X, ParamValues["y"] + GPoint.Position.Y);
         }
 
         public static Brush GrayBrush { get => new SolidColorBrush(Colors.Gray); }
@@ -66,12 +69,8 @@ namespace LaserCAM.CAM.GTools
             grid.RowDefinitions.Add(new RowDefinition());
 
 
-            var tbk = new TextBlock() { Text = "W:" };
+            var tbk = new TextBlock() { Text = "D:" };
             Grid.SetColumn(tbk, 0);
-            Grid.SetRow(tbk, 2);
-            grid.Children.Add(tbk);
-            tbk = new TextBlock() { Text = "H:" };
-            Grid.SetColumn(tbk, 2);
             Grid.SetRow(tbk, 2);
             grid.Children.Add(tbk);
             tbk = new TextBlock() { Text = "X:" };
@@ -83,12 +82,8 @@ namespace LaserCAM.CAM.GTools
             Grid.SetRow(tbk, 3);
             grid.Children.Add(tbk);
 
-            var tbx = new TextBox() { Tag = "w", Text = "20" };
+            var tbx = new TextBox() { Tag = "d", Text = "20" };
             Grid.SetColumn(tbx, 1);
-            Grid.SetRow(tbx, 2);
-            grid.Children.Add(tbx);
-            tbx = new TextBox() { Tag = "h", Text = "20" };
-            Grid.SetColumn(tbx, 3);
             Grid.SetRow(tbx, 2);
             grid.Children.Add(tbx);
             tbx = new TextBox() { Tag = "x", Text = GCursor.Position.X.ToString() };
@@ -108,6 +103,7 @@ namespace LaserCAM.CAM.GTools
                 }
 
             ParamsWindow.Child = grid;
+            ParamsWindow.Visibility = Visibility.Visible;
         }
 
         protected virtual void DigitValidateInput(object sender, TextCompositionEventArgs e)

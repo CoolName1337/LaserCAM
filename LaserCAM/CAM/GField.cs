@@ -1,6 +1,7 @@
 ﻿using LaserCAM.CAM.GShapes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,12 +12,16 @@ namespace LaserCAM.CAM
     {
         public static Panel MainPanel { get; set; }
 
+        public static List<GChange> Changes { get; set; } = new();
+
+        private static List<GShape> SelectedShapes { get; set; } = new();
+
         public static List<GShape> AllShapes { get; set; } = new();
 
         private static GSample _gSample;
         public static GSample Sample
         {
-            get => _gSample; 
+            get => _gSample;
             set
             {
                 Sample?.Remove();
@@ -31,7 +36,7 @@ namespace LaserCAM.CAM
             get => kSize;
             set
             {
-                kSize = value < 0.3 ? 0.3 : value > 3 ? 3 : value;
+                kSize = value < 0.3 ? 0.3 : value > 4 ? 4 : value;
                 kSize = Math.Round(kSize, 1);
                 if (Panel != null)
                     Panel.RenderTransform = new ScaleTransform(kSize, kSize);
@@ -74,10 +79,10 @@ namespace LaserCAM.CAM
                 var futurePoint = Position - delta;
 
                 if (futurePoint.X > Sample.Position.X + MainPanel.ActualWidth ||
-                    futurePoint.X < Sample.Position.X)
+                    futurePoint.X < Sample.Position.X - Sample.Width * KSize)
                     delta.X = 0;
-                if (futurePoint.Y > Sample.Position.Y + MainPanel.ActualHeight ||
-                    futurePoint.Y < Sample.Position.Y)
+                if (futurePoint.Y > Sample.Position.Y + MainPanel.ActualHeight + Sample.Height * KSize ||
+                    futurePoint.Y < Sample.Position.Y )
                     delta.Y = 0;
             }
 
@@ -90,8 +95,48 @@ namespace LaserCAM.CAM
         public static void Clear()
         {
             AllShapes.ForEach(shape => shape.Remove());
-            AllShapes = new();
+            AllShapes.Clear();
         }
 
+        public static void Select(GShape gShape)
+        {
+            SelectedShapes.Add(gShape);
+            gShape.Select();
+        }
+
+        public static void ClearSelect()
+        {
+            SelectedShapes.ForEach(gShape => gShape.Unselect());
+            SelectedShapes.Clear();
+        }
+
+        public static void RemoveSelected()
+        {
+            Changes.Add(new GChange(SelectedShapes.ToList(), false));
+            SelectedShapes.ForEach(shape => RemoveShape(shape));
+            SelectedShapes.Clear();
+        }
+
+        public static void RemoveShape(GShape shape)
+        {
+            AllShapes.Remove(shape);
+            shape.Remove();
+        }
+
+        public static void AddShape(GShape shape)
+        {
+            if (shape is GImage image && !Panel.Children.Contains(image.Image))
+            {
+                Changes.Add(new GChange(new List<GShape>() { image }, true));
+                AllShapes.Add(image);
+                Panel.Children.Add(image.Image);
+            }
+            else if(!Panel.Children.Contains(shape.Shape))
+            {
+                Changes.Add(new GChange(new List<GShape>() { shape }, true));
+                AllShapes.Add(shape);
+                Panel.Children.Add(shape.Shape);
+            }
+        }
     }
 }
