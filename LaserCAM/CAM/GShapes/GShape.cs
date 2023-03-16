@@ -1,8 +1,12 @@
 ﻿using LaserCAM.CAM.GTools;
+using LaserCAM.Extensions;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Bitmap = System.Drawing.Bitmap;
+using Color = System.Drawing.Color;
+using Image = System.Windows.Controls.Image;
 
 namespace LaserCAM.CAM.GShapes
 {
@@ -50,7 +54,9 @@ namespace LaserCAM.CAM.GShapes
         public static GShape FromSerialize(string shapeData)
         {
             char shapeType = shapeData[0];
-            double[] resArray = shapeData.Substring(1).Split('|').Select(str => double.Parse(str)).ToArray();
+            double[] resArray = new double[0];
+            if (shapeType != 'i')
+                resArray = shapeData.Substring(1).Split('|').Select(str => double.Parse(str)).ToArray();
             switch (shapeType)
             {
                 case 'l':
@@ -65,6 +71,26 @@ namespace LaserCAM.CAM.GShapes
                     Canvas.SetLeft(ellipse, resArray[0]);
                     Canvas.SetBottom(ellipse, resArray[1]);
                     return new GEllipse(ellipse);
+                case 'i':
+                    var imageArr = shapeData.Substring(1).Split('|');
+                    var pointsArr = imageArr.Last().Split(":").Select(str=> int.Parse(str)).ToArray();
+                    Bitmap bitmap = new Bitmap(int.Parse(imageArr[4]), int.Parse(imageArr[5]));
+
+                    for (int i = 0; i < pointsArr.Length-1; i+=2)
+                        bitmap.SetPixel(pointsArr[i], pointsArr[i+1], Color.Black);
+
+                    var points = bitmap.GetPointsFromBitmap(Color.Black, true);
+                    Image image = new();
+
+                    image.Source = bitmap.ToBitmapImage();
+                    image.Width = double.Parse(imageArr[2]);
+                    image.Height = double.Parse(imageArr[3]);
+                    RenderOptions.SetBitmapScalingMode(image, BitmapScalingMode.NearestNeighbor);
+
+                    Canvas.SetLeft(image, double.Parse(imageArr[0]));
+                    Canvas.SetBottom(image, double.Parse(imageArr[1]));
+
+                    return new GImage(image, bitmap, points);
             }
             return null;
         }

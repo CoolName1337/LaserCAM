@@ -1,0 +1,23 @@
+﻿<Window x:Class="LaserCAM.Windows.ParamsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LaserCAM.Windows"
+        mc:Ignorable="d"
+        Title="Параметры" Height="318" Width="368">
+    <TabControl>
+        <TabItem Header="Вывод">
+            <StackPanel CheckBox.Click="CheckBox_Click">
+                <CheckBox Tag="spaces" IsChecked="{DynamicResource useSpaces}">Использовать пробелы</CheckBox>
+                <CheckBox Tag="sep" IsChecked="{DynamicResource useDots}">Отделять дробную часть точкой</CheckBox>
+                <Separator Margin="0 10"/>
+                <CheckBox Tag="full" IsChecked="{DynamicResource fullCode}">Формировать полный код</CheckBox>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Coming Soon">
+            <StackPanel>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</Window>

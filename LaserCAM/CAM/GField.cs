@@ -1,4 +1,5 @@
 ﻿using LaserCAM.CAM.GShapes;
+using LaserCAM.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace LaserCAM.CAM
 
         public static List<GChange> Changes { get; set; } = new();
 
-        private static List<GShape> SelectedShapes { get; set; } = new();
+        public static List<GShape> SelectedShapes { get; set; } = new();
 
         public static List<GShape> AllShapes { get; set; } = new();
 
@@ -70,6 +71,19 @@ namespace LaserCAM.CAM
             KSize += scaleStep * kStep;
         }
 
+        private static Point ClampPoint(Point p)
+        {
+            if (p.X > Sample.Position.X + MainPanel.ActualWidth)
+                p.X = Sample.Position.X + MainPanel.ActualWidth;
+            if (p.X < Sample.Position.X - Sample.Width * KSize)
+                p.X = Sample.Position.X - Sample.Width * KSize;
+            if (p.Y > Sample.Position.Y + MainPanel.ActualHeight + Sample.Height * KSize)
+                p.Y = Sample.Position.Y + MainPanel.ActualHeight + Sample.Height * KSize;
+            if (p.Y < Sample.Position.Y)
+                p.Y = Sample.Position.Y;
+            return p;
+        }
+
         public static void MoveCanvas(Point point)
         {
             var delta = PastPos - point;
@@ -78,18 +92,10 @@ namespace LaserCAM.CAM
             {
                 var futurePoint = Position - delta;
 
-                if (futurePoint.X > Sample.Position.X + MainPanel.ActualWidth ||
-                    futurePoint.X < Sample.Position.X - Sample.Width * KSize)
-                    delta.X = 0;
-                if (futurePoint.Y > Sample.Position.Y + MainPanel.ActualHeight + Sample.Height * KSize ||
-                    futurePoint.Y < Sample.Position.Y )
-                    delta.Y = 0;
+                Position = ClampPoint(futurePoint);
+
+                PastPos = point;
             }
-
-
-            Position -= delta;
-
-            PastPos = point;
         }
 
         public static void Clear()
@@ -98,10 +104,25 @@ namespace LaserCAM.CAM
             AllShapes.Clear();
         }
 
+        public static void ChangeSelecting(GShape gShape)
+        {
+            if (SelectedShapes.Contains(gShape))
+                Unselect(gShape);
+            else
+                Select(gShape);
+        }
+
         public static void Select(GShape gShape)
         {
             SelectedShapes.Add(gShape);
             gShape.Select();
+        }
+
+        public static void Unselect(GShape gShape)
+        {
+            SelectedShapes.Remove(gShape);
+            gShape.Unselect();
+
         }
 
         public static void ClearSelect()

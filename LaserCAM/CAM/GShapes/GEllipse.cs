@@ -1,5 +1,6 @@
 ﻿using LaserCAM.CAM.GTools;
 using LaserCAM.Extensions;
+using System.Drawing.Drawing2D;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;

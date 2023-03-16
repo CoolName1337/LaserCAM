@@ -45,13 +45,16 @@ namespace LaserCAM.CAM.GTools
         public override void OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton != MouseButton.Left) return;
-            GField.ClearSelect();
+            if(!Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                GField.ClearSelect();
+            }
             foreach (var gShape in GField.AllShapes)
             {
                 if (gShape.Shape is Line line)
                 {
                     if (IsInsideSelectedArea(new Point(line.X1, -line.Y1)) || IsInsideSelectedArea(new Point(line.X2, -line.Y2)))
-                        GField.Select(gShape);
+                        GField.ChangeSelecting(gShape);
                 }
                 else if (gShape is GImage gImage)
                 {
@@ -60,7 +63,7 @@ namespace LaserCAM.CAM.GTools
                         Canvas.GetBottom(gImage.Image) + gImage.Image.Height / 2
                         );
                     if (IsInsideSelectedArea(p, gImage.Image.Width, gImage.Image.Height))
-                        GField.Select(gShape);
+                        GField.ChangeSelecting(gShape);
                 }
                 else
                 {
@@ -69,10 +72,11 @@ namespace LaserCAM.CAM.GTools
                         Canvas.GetBottom(gShape.Shape) + gShape.Shape.Height / 2
                         );
                     if (IsInsideSelectedArea(p, gShape.Shape.Width, gShape.Shape.Height))
-                        GField.Select(gShape);
+                        GField.ChangeSelecting(gShape);
                 }
             }
             GField.Panel.Children.Remove(selectRectangle);
+            SetParamWindowStyle();
         }
         public override void OnLeftMouseDown()
         {
@@ -95,6 +99,7 @@ namespace LaserCAM.CAM.GTools
 
             selectRectangle.Height = Math.Abs(point2.Y);
             selectRectangle.Width = Math.Abs(point2.X);
+            selectRectangle.StrokeThickness = 1/GField.KSize;
 
             if (point2.Y < 0)
                 Canvas.SetBottom(selectRectangle, GCursor.Position.Y);
@@ -103,10 +108,16 @@ namespace LaserCAM.CAM.GTools
 
         }
 
-        public override void SetParamWindow()
+        private void SetParamWindowStyle()
         {
             ParamsWindow.Visibility = Visibility.Hidden;
+            if (GField.SelectedShapes.Count == 1)
+            {
+                ParamsWindow.Visibility = Visibility.Visible;
+            }
+
         }
+        public override void SetParamWindow() { SetParamWindowStyle(); }
 
         public override void InitializeShape() { }
 

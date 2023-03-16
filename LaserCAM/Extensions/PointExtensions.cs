@@ -16,7 +16,7 @@ namespace LaserCAM.Extensions
             p.Y /= d;
             return p;
         }
-        public static Point Round(this Point p) => new Point(p.X.Round(), p.Y.Round());
+        public static Point Round(this Point p, int digits = 2) => new Point(p.X.Round(digits), p.Y.Round(digits));
     }
 
 }

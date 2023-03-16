@@ -50,7 +50,7 @@
                 <MenuItem Header="Назад"></MenuItem>
                 <MenuItem Header="Вперед"></MenuItem>
                 <Separator/>
-                <MenuItem Header="Параметры..."></MenuItem>
+                <MenuItem Header="Параметры..." Click="OpenParam_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Инструменты">
                 <MenuItem Header="..."></MenuItem>

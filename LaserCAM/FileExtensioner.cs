@@ -1,12 +1,9 @@
 ﻿using LaserCAM.CAM;
 using LaserCAM.CAM.GShapes;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Shapes;
 
 namespace LaserCAM
 {
@@ -22,22 +19,26 @@ namespace LaserCAM
 
         private static StringBuilder stringBuilder = new();
 
-        public static async Task SaveProject(string path)
+        public static void SaveProject(string path)
         {
+            stringBuilder.Clear();
             stringBuilder.AppendLine($"{GField.Sample.Width}|{GField.Sample.Height}");
             stringBuilder.AppendLine($"{GPoint.Position.X}|{GPoint.Position.Y}");
             foreach (GShape shape in GField.AllShapes)
-                stringBuilder.Append(shape.ToSerialize()+";");
+            {
+                var str = shape.ToSerialize() + ";";
+                stringBuilder.Append(str);
+            }
 
-            using(FileStream fileStream = File.OpenWrite(path))
+            using(FileStream fileStream = File.Open(path, FileMode.Create))
             {
                 byte[] buffer = Encoding.UTF8.GetBytes(stringBuilder.ToString());
 
-                await fileStream.WriteAsync(buffer, 0, buffer.Length);
+                fileStream.Write(buffer, 0, buffer.Length);
             }
         }
 
-        public static async Task OpenProject(string path)
+        public static void OpenProject(string path)
         {
             var mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.UnsetSample();
@@ -46,7 +47,7 @@ namespace LaserCAM
             {
                 byte[] buffer = new byte[fileStream.Length];
 
-                await fileStream.ReadAsync(buffer, 0, buffer.Length);
+                fileStream.Read(buffer, 0, buffer.Length);
 
                 result = Encoding.UTF8.GetString(buffer);
             }
@@ -62,12 +63,12 @@ namespace LaserCAM
                     )
                 );
 
-            GField.AllShapes = resultArray[2]
-                .Split(";", System.StringSplitOptions.RemoveEmptyEntries)
+            var listOfSerializedShapes = resultArray[2]
+                .Split(";", System.StringSplitOptions.RemoveEmptyEntries);
+            var listOfShapes = listOfSerializedShapes
                 .Select(str => GShape.FromSerialize(str))
                 .ToList();
-
-            GField.AllShapes.ForEach(shape => shape.Create());
+            listOfShapes.ForEach(shape => shape.Create());
         }
 
         public static string GenerateGCode()

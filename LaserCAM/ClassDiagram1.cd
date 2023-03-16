@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="LaserCAM.CAM.GShapes.GEllipse">
+    <Position X="12.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CAM\GShapes\GEllipse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GShapes.GImage">
+    <Position X="14.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAQAAgAgAAAgABAAAABAAAFAAACAAQAAIgAA=</HashCode>
+      <FileName>CAM\GShapes\GImage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GShapes.GLine">
+    <Position X="16.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CAM\GShapes\GLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GShapes.GRectangle">
+    <Position X="18.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CAM\GShapes\GRectangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GShapes.GShape">
+    <Position X="14.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAQAAAAAAAAIABAAAABAAAEAAAAAAQAAIAAA=</HashCode>
+      <FileName>CAM\GShapes\GShape.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GTool">
+    <Position X="14.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEACAAAAQAAgAAAAAAAAAAUEFAIAAQAIAAAAQDCAEg=</HashCode>
+      <FileName>CAM\GTools\GTool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GToolCursor">
+    <Position X="10.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgCAAAAAAAAAAAAAAAAEABAIAAQAIACAAQACAEA=</HashCode>
+      <FileName>CAM\GTools\GToolCursor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GToolEllipse">
+    <Position X="12.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAABAIAAQAIAAAAQAAAEA=</HashCode>
+      <FileName>CAM\GTools\GToolEllipse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GToolImage">
+    <Position X="14.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAQAAAAAAAAAAAIAAIEBAIAAQAYAAAAQAAAEA=</HashCode>
+      <FileName>CAM\GTools\GToolImage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GToolLine">
+    <Position X="16.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAEABAIAAQAIAAAAQAAAEA=</HashCode>
+      <FileName>CAM\GTools\GToolLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GTools.GToolRectangle">
+    <Position X="18.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAEABQIAAQAIAAAAQAAAEA=</HashCode>
+      <FileName>CAM\GTools\GToolRectangle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GChange">
+    <Position X="18.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAE=</HashCode>
+      <FileName>CAM\GChange.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GCursor">
+    <Position X="10.75" Y="15.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQIAAAgAAAAAAgCAAAAAAAAAQAAgCAIAAQgAAAEAA=</HashCode>
+      <FileName>CAM\GCursor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GField">
+    <Position X="20.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAIAAAACAgAAggAAAAAABAgQAQBBIBACAAUABoAEA=</HashCode>
+      <FileName>CAM\GField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GGrid">
+    <Position X="24.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAACAAAAAAAEIAAAAAAAAABAgAAKAAAAAAAAAA=</HashCode>
+      <FileName>CAM\GGrid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GParams">
+    <Position X="18.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAABAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>CAM\GParams.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GPoint">
+    <Position X="22.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgEAAAABAAAAQAAgAAAAAAgAAAAAA=</HashCode>
+      <FileName>CAM\GPoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.CAM.GSample">
+    <Position X="26.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAgAAAABEAAAAQAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>CAM\GSample.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LaserCAM.FileExtensioner">
+    <Position X="20.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAACAAAAAAACAAAAAgAAAAAAAAQAAAAACAA=</HashCode>
+      <FileName>FileExtensioner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

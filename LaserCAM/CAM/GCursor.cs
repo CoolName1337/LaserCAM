@@ -43,11 +43,11 @@ namespace LaserCAM.CAM
             }
         }
 
-        private static double _step = 0.01;
+        private static double _step = 0.0001;
         public static double Step
         {
             get => _step;
-            set => _step = value > 0.01 ? value : 0.01;
+            set => _step = value > 0.0001 ? value : 0.0001;
         }
 
         public static bool UseStep { get; set; } = false;
@@ -67,7 +67,7 @@ namespace LaserCAM.CAM
                 var point = (new Point(-GField.Position.X, GField.Position.Y) - new Vector(-value.X, value.Y)).Divide(GField.KSize);
 
                 _position = new Point(Math.Round(point.X, 2), Math.Round(point.Y, 2));
-                if (UseStep || Step == 0.01)
+                if (UseStep || Step == 0.0001)
                     _position = new Point(
                         _position.X + GPoint.Position.X % Step - _position.X % Step, 
                         _position.Y + GPoint.Position.Y % Step - _position.Y % Step

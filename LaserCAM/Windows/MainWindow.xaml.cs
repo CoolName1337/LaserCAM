@@ -1,6 +1,7 @@
 ﻿using LaserCAM.CAM;
 using LaserCAM.CAM.GTools;
 using Microsoft.Win32;
+using LaserCAM.Windows;
 using System;
 using System.Linq;
 using System.Windows;
@@ -174,7 +175,7 @@ namespace LaserCAM
                 GCursor.SelectedTool?.OnLeftMouseDown();
                 e.Handled = true;
             }
-            if(e.Key == Key.Delete)
+            if (e.Key == Key.Delete)
             {
                 GField.RemoveSelected();
             }
@@ -214,21 +215,27 @@ namespace LaserCAM
             var wind = new StartWindow();
             wind.Show();
         }
+        
+        private void OpenParam_Click(object sender, RoutedEventArgs e)
+        {
+            var wind = new ParamsWindow();
+            wind.Show();
+        }
 
-        private async void OpenFile_Click(object sender, RoutedEventArgs e)
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog() { Filter = "LCAM files (*.lcam)|*.lcam" };
             if (openFileDialog.ShowDialog() == true)
             {
-                await FileExtensioner.OpenProject(openFileDialog.FileName);
+                FileExtensioner.OpenProject(openFileDialog.FileName);
             }
         }
-        private async void SaveFile_Click(object sender, RoutedEventArgs e)
+        private void SaveFile_Click(object sender, RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog() { Filter = "LCAM files (*.lcam)|*.lcam" };
             if (saveFileDialog.ShowDialog() == true)
             {
-                await FileExtensioner.SaveProject(saveFileDialog.FileName);
+                FileExtensioner.SaveProject(saveFileDialog.FileName);
             }
         }
 
@@ -261,7 +268,7 @@ namespace LaserCAM
 
         private void StepSize_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if(sender is TextBox textBox)
+            if (sender is TextBox textBox)
             {
                 if (!char.IsDigit(e.Text[0]) && e.Text != ",")
                     e.Handled = true;
