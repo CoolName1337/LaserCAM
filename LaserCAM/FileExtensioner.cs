@@ -23,7 +23,7 @@ namespace LaserCAM
         {
             stringBuilder.Clear();
             stringBuilder.AppendLine($"{GField.Sample.Width}|{GField.Sample.Height}");
-            stringBuilder.AppendLine($"{GPoint.Position.X}|{GPoint.Position.Y}");
+            stringBuilder.AppendLine($"{GZeroPoint.Position.X}|{GZeroPoint.Position.Y}");
             foreach (GShape shape in GField.AllShapes)
             {
                 var str = shape.ToSerialize() + ";";
@@ -55,11 +55,11 @@ namespace LaserCAM
             string[] resultArray = result.Split("\n", System.StringSplitOptions.RemoveEmptyEntries);
 
             string[] gSampleData = resultArray[0].Split("|");
-            string[] gPointData = resultArray[1].Split("|");
+            string[] GZeroPointData = resultArray[1].Split("|");
             mainWindow.SetSample(
                 double.Parse(gSampleData[0]), double.Parse(gSampleData[1]), 
                 new Point(
-                    double.Parse(gPointData[0]), double.Parse(gPointData[1])
+                    double.Parse(GZeroPointData[0]), double.Parse(GZeroPointData[1])
                     )
                 );
 

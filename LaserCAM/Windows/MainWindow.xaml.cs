@@ -18,6 +18,8 @@ namespace LaserCAM
 
         public MainWindow()
         {
+            foreach (string key in GBindingParams.Params.Keys)
+                Resources.Add(key, GBindingParams.Params[key]);
             InitializeComponent();
             StartInitializing();
         }
@@ -27,6 +29,7 @@ namespace LaserCAM
             GField.MainPanel = mainCanvas;
             GField.Panel = canvasField;
             GTool.ParamsWindow = ParamsContainer;
+
 
             ReturnCommand.InputGestures.Add(new KeyGesture(Key.Z, ModifierKeys.Control));
         }
@@ -41,8 +44,8 @@ namespace LaserCAM
         {
             UnsetSample();
             GField.Sample = new GSample(w, h);
-            GPoint.IsActive = true;
-            GPoint.Position = ZeroPoint;
+            GZeroPoint.IsActive = true;
+            GZeroPoint.Position = ZeroPoint;
             GField.MoveCanvas(new Point(mainCanvas.ActualWidth / 2, mainCanvas.ActualHeight / 2));
 
             ViewContainer.Visibility = Visibility.Visible;
@@ -62,7 +65,7 @@ namespace LaserCAM
             ParamsContainer.Visibility = Visibility.Hidden;
             FieldParamsPanel.Visibility = Visibility.Hidden;
             StartMask.Visibility = Visibility.Visible;
-            GPoint.IsActive = false;
+            GZeroPoint.IsActive = false;
             GGrid.IsActive = false;
         }
 
@@ -181,7 +184,7 @@ namespace LaserCAM
             }
             if (e.Key == Key.O)
             {
-                GPoint.Position = GCursor.Position;
+                GZeroPoint.Position = GCursor.Position;
             }
             if (GTool.ParamsWindow.Child is Grid gr)
             {
@@ -294,6 +297,17 @@ namespace LaserCAM
             var change = GField.Changes.LastOrDefault();
             change?.Return();
             GField.Changes.Remove(change);
+        }
+
+        private void GridBinding_Click(object sender, RoutedEventArgs e)
+        {
+            if(e.Source is CheckBox cb)
+            {
+                if (cb.Tag.ToString() == "UseBinding")
+                    GCursor.SetBindingPointVisibility(Visibility.Hidden);
+                GBindingParams.Params[cb.Tag.ToString()] = cb.IsChecked ?? false;
+            }
+            
         }
     }
 }

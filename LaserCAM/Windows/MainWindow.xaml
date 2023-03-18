@@ -91,7 +91,14 @@
                     <TextBox Width="50" PreviewTextInput="StepSize_PreviewTextInput" TextChanged="StepSize_TextChanged"></TextBox>
                 </StackPanel>
             </TabItem >
-            <TabItem Header="Привязка"></TabItem>
+            <TabItem Header="Привязка">
+                <StackPanel Orientation="Horizontal" CheckBox.Click="GridBinding_Click">
+                    <CheckBox Content="Использывать привязку" Margin="0 0 20 0" Tag="UseBinding" IsChecked="{DynamicResource UseBinding}"></CheckBox>
+                    <CheckBox Content="Центр" Margin="0 0 20 0" Tag="Center" IsChecked="{DynamicResource Center}"></CheckBox>
+                    <CheckBox Content="Вершины" Margin="0 0 20 0" Tag="Vertex" IsChecked="{DynamicResource Vertex}"></CheckBox>
+                    <CheckBox Content="Центр ребер" Margin="0 0 20 0" Tag="Edge" IsChecked="{DynamicResource Edge}"></CheckBox>
+                </StackPanel>
+            </TabItem >
         </TabControl>
 
 

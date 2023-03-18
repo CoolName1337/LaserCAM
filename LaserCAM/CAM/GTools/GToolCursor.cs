@@ -115,7 +115,6 @@ namespace LaserCAM.CAM.GTools
             {
                 ParamsWindow.Visibility = Visibility.Visible;
             }
-
         }
         public override void SetParamWindow() { SetParamWindowStyle(); }
 

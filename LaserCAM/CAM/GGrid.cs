@@ -23,14 +23,14 @@ namespace LaserCAM.CAM
                 }
                 verticalLines.Clear();
                 horizontalLines.Clear();
-                for (double i = GPoint.Position.X; i < GField.MainPanel.ActualWidth; i += _step)
+                for (double i = GZeroPoint.Position.X; i < GField.MainPanel.ActualWidth; i += _step)
                     horizontalLines.Add(CreateLine(i, i, GField.MainPanel.ActualHeight, -GField.MainPanel.ActualHeight));
-                for (double i = -GPoint.Position.Y; i < GField.MainPanel.ActualHeight; i += _step)
+                for (double i = -GZeroPoint.Position.Y; i < GField.MainPanel.ActualHeight; i += _step)
                     verticalLines.Add(CreateLine(GField.MainPanel.ActualWidth, -GField.MainPanel.ActualWidth, i, i));
 
-                for (double i = GPoint.Position.X; i > -GField.MainPanel.ActualWidth; i -= _step)
+                for (double i = GZeroPoint.Position.X; i > -GField.MainPanel.ActualWidth; i -= _step)
                     horizontalLines.Add(CreateLine(i, i, GField.MainPanel.ActualHeight, -GField.MainPanel.ActualHeight));
-                for (double i = -GPoint.Position.Y; i > -GField.MainPanel.ActualHeight; i -= _step)
+                for (double i = -GZeroPoint.Position.Y; i > -GField.MainPanel.ActualHeight; i -= _step)
                     verticalLines.Add(CreateLine(GField.MainPanel.ActualWidth, -GField.MainPanel.ActualWidth, i, i));
             }
         }

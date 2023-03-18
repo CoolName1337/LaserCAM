@@ -75,8 +75,8 @@ namespace LaserCAM.CAM.GShapes
         {
             var res = Points.Select(p =>
             {
-                p.X += Canvas.GetLeft(Image)/kSize - GPoint.Position.X;
-                p.Y -= Canvas.GetBottom(Image) / kSize - GPoint.Position.Y;
+                p.X += Canvas.GetLeft(Image)/kSize - GZeroPoint.Position.X;
+                p.Y -= Canvas.GetBottom(Image) / kSize - GZeroPoint.Position.Y;
                 return p;
             });
             return res.ToList();
@@ -113,6 +113,11 @@ namespace LaserCAM.CAM.GShapes
         {
             return $"i{Canvas.GetLeft(Image)}|{Canvas.GetBottom(Image)}|{Image.Width}|{Image.Height}|" +
                 $"{Bitmap.Width}|{Bitmap.Height}|{string.Join(":", Points).Replace(";",":")}";
+        }
+
+        public override List<GBindingPoint> GetBindingPoints()
+        {
+            return null;
         }
     }
 }

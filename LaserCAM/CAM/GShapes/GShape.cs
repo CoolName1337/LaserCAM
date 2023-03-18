@@ -1,6 +1,8 @@
 ﻿using LaserCAM.CAM.GTools;
 using LaserCAM.Extensions;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -16,7 +18,7 @@ namespace LaserCAM.CAM.GShapes
         public Shape Shape;
         public GShape(Shape shape)
         {
-            if(shape != null)
+            if (shape != null)
             {
                 shape.Stroke = GTool.BlackBrush;
                 Shape = shape;
@@ -29,6 +31,9 @@ namespace LaserCAM.CAM.GShapes
             Shape.DataContext = this;
             GField.AddShape(this);
         }
+
+        public abstract List<GBindingPoint> GetBindingPoints();
+
         public virtual void Remove()
         {
             GField.Panel.Children.Remove(Shape);

@@ -1,6 +1,10 @@
-﻿using LaserCAM.CAM.GTools;
+﻿using LaserCAM.CAM.GShapes;
+using LaserCAM.CAM.GTools;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace LaserCAM.CAM
@@ -33,6 +37,23 @@ namespace LaserCAM.CAM
         public void Remove()
         {
             GField.Panel.Children.Remove(_rectangle);
+        }
+        public List<GBindingPoint> GetBindingPoints()
+        {
+            return new GBindingPoint[]
+            {
+                new GBindingPoint(_rectangle.Width / 2, _rectangle.Height / 2, GBindingPointType.Center),
+
+                new GBindingPoint(0, _rectangle.Height / 2, GBindingPointType.Edge),
+                new GBindingPoint(_rectangle.Width / 2, 0, GBindingPointType.Edge),
+                new GBindingPoint(_rectangle.Width/2, _rectangle.Height, GBindingPointType.Edge),
+                new GBindingPoint(_rectangle.Width, _rectangle.Height/2, GBindingPointType.Edge),
+
+                new GBindingPoint(0, 0, GBindingPointType.Vertex),
+                new GBindingPoint(_rectangle.Width, _rectangle.Height, GBindingPointType.Vertex),
+                new GBindingPoint(0, _rectangle.Height, GBindingPointType.Vertex),
+                new GBindingPoint(_rectangle.Width, 0, GBindingPointType.Vertex),
+            }.ToList();
         }
     }
 }

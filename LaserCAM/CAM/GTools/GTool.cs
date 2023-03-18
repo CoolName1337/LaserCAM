@@ -38,7 +38,7 @@ namespace LaserCAM.CAM.GTools
 
         public static Point Cursor
         {
-            get => new Point(ParamValues["x"] + GPoint.Position.X, ParamValues["y"] + GPoint.Position.Y);
+            get => new Point(ParamValues["x"] + GZeroPoint.Position.X, ParamValues["y"] + GZeroPoint.Position.Y);
         }
 
         public static Brush GrayBrush { get => new SolidColorBrush(Colors.Gray); }

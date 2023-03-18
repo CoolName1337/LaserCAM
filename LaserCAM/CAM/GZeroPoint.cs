@@ -4,7 +4,7 @@ using System.Windows.Shapes;
 
 namespace LaserCAM.CAM
 {
-    public static class GPoint
+    public static class GZeroPoint
     {
         private static Point _position;
         public static Point Position
