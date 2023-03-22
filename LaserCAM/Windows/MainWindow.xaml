@@ -24,8 +24,9 @@
 
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static local:MainWindow.ReturnCommand}" Executed="ReturnCommand_Executed"></CommandBinding>
+        <CommandBinding Command="Help" Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -47,16 +48,10 @@
                 <MenuItem Header="Сохранить как..." Click="SaveFile_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Редактировать">
-                <MenuItem Header="Назад"></MenuItem>
-                <MenuItem Header="Вперед"></MenuItem>
+                <MenuItem Header="Справка" Command="Help"></MenuItem>
+                <MenuItem Header="Назад" Command="{x:Static local:MainWindow.ReturnCommand}"></MenuItem>
                 <Separator/>
                 <MenuItem Header="Параметры..." Click="OpenParam_Click"></MenuItem>
-            </MenuItem>
-            <MenuItem Header="Инструменты">
-                <MenuItem Header="..."></MenuItem>
-                <MenuItem Header="..."></MenuItem>
-                <MenuItem Header="..."></MenuItem>
-                <MenuItem Header="..."></MenuItem>
             </MenuItem>
         </Menu>
 

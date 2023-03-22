@@ -13,7 +13,6 @@ namespace LaserCAM
 {
     public partial class MainWindow : Window
     {
-
         public static RoutedCommand ReturnCommand = new RoutedCommand();
 
         public MainWindow()
@@ -314,7 +313,18 @@ namespace LaserCAM
                     GCursor.SetBindingPointVisibility(Visibility.Hidden);
                 GBindingParams.Params[cb.Tag.ToString()] = cb.IsChecked ?? false;
             }
-            
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show(
+                "O - Переместить нулевую точку\n" +
+                "Ctrl+Z - Назад\n" +
+                "← ↑ → ↓  - Переместить курсор\n" +
+                "DELETE - Удалить выделенные фигуры\n" +
+                "X, Y - Соответствующие оси\n" +
+                "R, D - Радиус, диаметр(размер картинки)\n" +
+                "F - Разворот дуги\n");
         }
     }
 }
