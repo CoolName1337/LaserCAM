@@ -51,12 +51,7 @@ namespace LaserCAM.CAM.GTools
             }
             foreach (var gShape in GField.AllShapes)
             {
-                if (gShape.Shape is Line line)
-                {
-                    if (IsInsideSelectedArea(new Point(line.X1, -line.Y1)) || IsInsideSelectedArea(new Point(line.X2, -line.Y2)))
-                        GField.ChangeSelecting(gShape);
-                }
-                else if (gShape is GImage gImage)
+                if(gShape is GImage gImage)
                 {
                     var p = new Point(
                         Canvas.GetLeft(gImage.Image) + gImage.Image.Width / 2,
@@ -67,12 +62,14 @@ namespace LaserCAM.CAM.GTools
                 }
                 else
                 {
-                    var p = new Point(
-                        Canvas.GetLeft(gShape.Shape) + gShape.Shape.Width / 2,
-                        Canvas.GetBottom(gShape.Shape) + gShape.Shape.Height / 2
-                        );
-                    if (IsInsideSelectedArea(p, gShape.Shape.Width, gShape.Shape.Height))
-                        GField.ChangeSelecting(gShape);
+                    foreach (var gBindingPoint in gShape.GetBindingPoints())
+                    {
+                        if (IsInsideSelectedArea(gBindingPoint.Point))
+                        {
+                            GField.ChangeSelecting(gShape);
+                            break;
+                        }
+                    }
                 }
             }
             GField.Panel.Children.Remove(selectRectangle);
@@ -111,10 +108,6 @@ namespace LaserCAM.CAM.GTools
         private void SetParamWindowStyle()
         {
             ParamsWindow.Visibility = Visibility.Hidden;
-            if (GField.SelectedShapes.Count == 1)
-            {
-                ParamsWindow.Visibility = Visibility.Visible;
-            }
         }
         public override void SetParamWindow() { SetParamWindowStyle(); }
 

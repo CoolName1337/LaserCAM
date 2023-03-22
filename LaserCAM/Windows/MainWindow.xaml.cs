@@ -29,7 +29,7 @@ namespace LaserCAM
             GField.MainPanel = mainCanvas;
             GField.Panel = canvasField;
             GTool.ParamsWindow = ParamsContainer;
-
+            GCursor.ViewConatiner = ViewContainer;
 
             ReturnCommand.InputGestures.Add(new KeyGesture(Key.Z, ModifierKeys.Control));
         }
@@ -98,24 +98,7 @@ namespace LaserCAM
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             var mousePos = e.GetPosition(mainCanvas);
-            GCursor.Position = mousePos;
-
-            XTextBlock.Text = GCursor.RelativePosition.X.ToString();
-            YTextBlock.Text = GCursor.RelativePosition.Y.ToString();
-
-            if (GTool.ParamsWindow.Child is Grid gr)
-            {
-                foreach (FrameworkElement element in gr.Children)
-                {
-                    if (element is TextBox tb)
-                    {
-                        if (tb.Tag == "x")
-                            tb.Text = GCursor.RelativePosition.X.ToString();
-                        if (tb.Tag == "y")
-                            tb.Text = GCursor.RelativePosition.Y.ToString();
-                    }
-                }
-            }
+            GCursor.SetPositionFromMouse(mousePos);
 
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
@@ -141,6 +124,9 @@ namespace LaserCAM
                         break;
                     case "ellipse":
                         GCursor.SelectedTool = new GToolEllipse();
+                        break;
+                    case "arc":
+                        GCursor.SelectedTool = new GToolArc();
                         break;
                     case "rectangle":
                         GCursor.SelectedTool = new GToolRectangle();
@@ -186,6 +172,16 @@ namespace LaserCAM
             {
                 GZeroPoint.Position = GCursor.Position;
             }
+
+            if (e.Key == Key.Right)
+                GCursor.Position += new Vector(GCursor.Step, 0);
+            if (e.Key == Key.Left)
+                GCursor.Position += new Vector(-GCursor.Step, 0);
+            if (e.Key == Key.Up)
+                GCursor.Position += new Vector(0, GCursor.Step);
+            if (e.Key == Key.Down)
+                GCursor.Position += new Vector(0, -GCursor.Step);
+
             if (GTool.ParamsWindow.Child is Grid gr)
             {
                 switch (e.Key)
@@ -204,6 +200,17 @@ namespace LaserCAM
                         foreach (FrameworkElement el in gr.Children)
                             if (el.Tag == "d")
                                 el.Focus();
+                        break;
+                    case Key.R:
+                        foreach (FrameworkElement el in gr.Children)
+                            if (el.Tag == "r")
+                                el.Focus();
+                        break;
+                    case Key.F:
+                        if(GCursor.SelectedTool is GToolArc gtarc)
+                        {
+                            gtarc.Flip();
+                        }
                         break;
                     case Key.Escape:
                         ClearTool();

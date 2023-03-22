@@ -27,14 +27,14 @@ namespace LaserCAM.CAM.GShapes
         {
             var pos = new Point(Canvas.GetLeft(Shape), Canvas.GetBottom(Shape));
 
-            return new GBindingPoint[]
+            return new List<GBindingPoint>()
             {
                 new GBindingPoint(pos.X + Shape.Width / 2, pos.Y + Shape.Height / 2, GBindingPointType.Center),
                 new GBindingPoint(pos.X + Shape.Width / 2, pos.Y, GBindingPointType.Edge),
                 new GBindingPoint(pos.X, pos.Y+ Shape.Height / 2, GBindingPointType.Edge),
                 new GBindingPoint(pos.X+ Shape.Width / 2, pos.Y+ Shape.Height, GBindingPointType.Edge),
                 new GBindingPoint(pos.X+ Shape.Width, pos.Y+ Shape.Height/2, GBindingPointType.Edge),
-            }.ToList();
+            };
         }
     }
 }

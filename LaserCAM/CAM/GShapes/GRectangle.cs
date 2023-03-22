@@ -15,7 +15,7 @@ namespace LaserCAM.CAM.GShapes
         {
             var pos = new Point(Canvas.GetLeft(Shape), Canvas.GetBottom(Shape));
 
-            return new GBindingPoint[]
+            return new List<GBindingPoint>()
             {
                 new GBindingPoint(pos.X + Shape.Width / 2, pos.Y + Shape.Height / 2, GBindingPointType.Center),
 
@@ -28,7 +28,7 @@ namespace LaserCAM.CAM.GShapes
                 new GBindingPoint(pos.X + Shape.Width, pos.Y + Shape.Height, GBindingPointType.Vertex),
                 new GBindingPoint(pos.X, pos.Y + Shape.Height, GBindingPointType.Vertex),
                 new GBindingPoint(pos.X + Shape.Width, pos.Y, GBindingPointType.Vertex),
-            }.ToList();
+            };
         }
 
         public override string ToGCode()

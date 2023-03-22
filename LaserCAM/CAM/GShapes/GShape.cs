@@ -96,6 +96,19 @@ namespace LaserCAM.CAM.GShapes
                     Canvas.SetBottom(image, double.Parse(imageArr[1]));
 
                     return new GImage(image, bitmap, points);
+                case 'a':
+                    var point1 = new Point(resArray[0], -resArray[1]);
+                    var point2 = new Point(resArray[2], -resArray[3]);
+                    Path path = new() { Stroke = new SolidColorBrush(Colors.Gray), StrokeThickness = 1 };
+                    PathSegment arcSegment = new ArcSegment() { Point = point2, Size = new Size(resArray[4], resArray[4]) };
+                    PathFigure arcFigure = new PathFigure(
+                        point1,
+                        new List<PathSegment>() { arcSegment },
+                        false
+                    );
+                    var figures = new PathFigureCollection() { arcFigure };
+                    path.Data = new PathGeometry() { Figures = figures };
+                    return new GArc(path, point1, point2, resArray[4]);
             }
             return null;
         }

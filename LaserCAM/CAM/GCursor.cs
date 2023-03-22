@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -14,6 +15,7 @@ namespace LaserCAM.CAM
 
     public static class GCursor
     {
+        private static bool _isMouse;
         private static Line verticalLine = new() { Stroke = GTool.GrayBrush, StrokeThickness = 1 };
         private static Line horizontalLine = new() { Stroke = GTool.GrayBrush, StrokeThickness = 1 };
 
@@ -65,6 +67,8 @@ namespace LaserCAM.CAM
             Width = 4,
             Height = 4
         };
+        public static Border ViewConatiner { get; set; }
+
 
         public static void SetBindingPointVisibility(Visibility visibility)
         {
@@ -77,8 +81,11 @@ namespace LaserCAM.CAM
             _bindRect.Visibility = Visibility.Hidden;
         }
 
-
-
+        public static void SetPositionFromMouse(Point point)
+        {
+            _isMouse = true;
+            Position = (new Point(-GField.Position.X, GField.Position.Y) - new Vector(-point.X, point.Y)).Divide(GField.KSize);
+        }
 
         /// <summary>
         /// Specially for shape positioning
@@ -90,7 +97,7 @@ namespace LaserCAM.CAM
             {
                 // Set calculated position
 
-                var point = (new Point(-GField.Position.X, GField.Position.Y) - new Vector(-value.X, value.Y)).Divide(GField.KSize);
+                var point = value;
 
                 _position = new Point(Math.Round(point.X, 2), Math.Round(point.Y, 2));
                 if (UseStep || Step == 0.0001)
@@ -99,55 +106,100 @@ namespace LaserCAM.CAM
                         _position.Y + GZeroPoint.Position.Y % Step - _position.Y % Step
                         );
 
-                // Binding
-                if (GBindingParams.Params["UseBinding"])
-                {
-                    var allPoints = new List<GBindingPoint>();
+                if(_isMouse)
+                    Binding();
 
-                    allPoints.AddRange(GField.Sample.GetBindingPoints());
-                    foreach (var points in GField.AllShapes.Select(sh => sh.GetBindingPoints()))
-                        if(points != null)
-                            allPoints.AddRange(points);
-
-                    var nearPoint = allPoints
-                        .Where(p =>
-                            GBindingParams.Params[p.Type.ToString()]
-                        )
-                        .OrderBy(p =>
-                            Math.Abs(_position.X - p.Point.X) +
-                            Math.Abs(_position.Y - p.Point.Y))
-                        .FirstOrDefault();
-
-                    if(allPoints.Any() && (nearPoint.Point - _position).Length < 25)
-                    {
-                        _bindRect.Visibility = Visibility.Visible;
-                        Canvas.SetBottom(_bindRect, nearPoint.Point.Y - _bindRect.Height / 2);
-                        Canvas.SetLeft(_bindRect, nearPoint.Point.X - _bindRect.Width / 2);
-                        _position = new Point(nearPoint.Point.X, nearPoint.Point.Y);
-                    }
-                    else
-                    {
-                        _bindRect.Visibility = Visibility.Hidden;
-                    }
-                }
-
-
+                UpdateTextBlocks();
 
                 // Set position for aim
-
-                verticalLine.X1 = verticalLine.X2 = _position.X;
-
-                verticalLine.Y1 = GField.MainPanel.ActualHeight / GField.KSize - _position.Y;
-                verticalLine.Y2 = -GField.MainPanel.ActualHeight / GField.KSize - _position.Y;
-
-                horizontalLine.Y1 = horizontalLine.Y2 = -_position.Y;
-
-                horizontalLine.X1 = -GField.MainPanel.ActualWidth / GField.KSize + _position.X;
-                horizontalLine.X2 = GField.MainPanel.ActualWidth / GField.KSize + _position.X;
-
-
+                SetAim(_position);
+                _isMouse = false;
             }
         }
+
+        // Update view and param containers textblock
+        public static void UpdateTextBlocks()
+        {
+            if (ViewConatiner.Child is Grid grid)
+            {
+                foreach (FrameworkElement element in grid.Children)
+                {
+                    if (element is TextBlock tb)
+                    {
+                        if (tb.Tag?.ToString() == "x")
+                            tb.Text = RelativePosition.X.ToString();
+                        if (tb.Tag?.ToString() == "y")
+                            tb.Text = RelativePosition.Y.ToString();
+                    }
+                }
+            }
+            if (GTool.ParamsWindow.Child is Grid gr)
+            {
+                foreach (FrameworkElement element in gr.Children)
+                {
+                    if (element is TextBox tb)
+                    {
+                        if (tb.Tag?.ToString() == "x")
+                            tb.Text = RelativePosition.X.ToString();
+                        if (tb.Tag?.ToString() == "y")
+                            tb.Text = RelativePosition.Y.ToString();
+                    }
+                }
+            }
+        }
+
+        private static void Binding()
+        {
+            if (GBindingParams.Params["UseBinding"] && !(SelectedTool is GToolCursor))
+            {
+                var allPoints = new List<GBindingPoint>();
+
+                allPoints.AddRange(GField.Sample.GetBindingPoints());
+                foreach (var points in GField.AllShapes.Select(sh => sh.GetBindingPoints()))
+                    if (points != null)
+                        allPoints.AddRange(points);
+
+                var nearPoint = allPoints
+                    .Where(p =>
+                        GBindingParams.Params[p.Type.ToString()]
+                    )
+                    .OrderBy(p =>
+                        Math.Abs(_position.X - p.Point.X) +
+                        Math.Abs(_position.Y - p.Point.Y))
+                    .FirstOrDefault();
+
+                if (allPoints.Any() && (nearPoint.Point - _position).Length < 25)
+                {
+                    _bindRect.Visibility = Visibility.Visible;
+                    Canvas.SetBottom(_bindRect, nearPoint.Point.Y - _bindRect.Height / 2);
+                    Canvas.SetLeft(_bindRect, nearPoint.Point.X - _bindRect.Width / 2);
+                    _position = new Point(nearPoint.Point.X, nearPoint.Point.Y);
+                }
+                else
+                {
+                    _bindRect.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                _bindRect.Visibility = Visibility.Hidden;
+            }
+        }
+
+
+        public static void SetAim(Point pos)
+        {
+            verticalLine.X1 = verticalLine.X2 = pos.X;
+
+            verticalLine.Y1 = GField.MainPanel.ActualHeight / GField.KSize - pos.Y;
+            verticalLine.Y2 = -GField.MainPanel.ActualHeight / GField.KSize - pos.Y;
+
+            horizontalLine.Y1 = horizontalLine.Y2 = -pos.Y;
+
+            horizontalLine.X1 = -GField.MainPanel.ActualWidth / GField.KSize + pos.X;
+            horizontalLine.X2 = GField.MainPanel.ActualWidth / GField.KSize + pos.X;
+        }
+
         /// <summary>
         /// Specially for outputs (for textBoxes, for results and etc)
         /// </summary>

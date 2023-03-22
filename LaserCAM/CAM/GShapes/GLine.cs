@@ -30,12 +30,12 @@ namespace LaserCAM.CAM.GShapes
         {
             if(Shape is Line line)
             {
-                return new GBindingPoint[]
+                return new List<GBindingPoint>()
                 {
                     new GBindingPoint((line.X1 + line.X2)/2, (-line.Y1 - line.Y2) / 2, GBindingPointType.Center),
                     new GBindingPoint(line.X1, -line.Y1, GBindingPointType.Vertex),
                     new GBindingPoint(line.X2, -line.Y2, GBindingPointType.Vertex),
-                }.ToList();
+                };
             }
             return null;
 

@@ -130,9 +130,9 @@
                 <Label Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="20">Вид</Label>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Padding="10 0">X:</TextBlock>
-                <TextBlock Name="XTextBlock" Grid.Row="2" Grid.Column="1"></TextBlock>
+                <TextBlock Tag="x" Grid.Row="2" Grid.Column="1"></TextBlock>
                 <TextBlock Grid.Row="2" Grid.Column="2" Padding="10 0">Y:</TextBlock>
-                <TextBlock Name="YTextBlock" Grid.Row="2" Grid.Column="3"></TextBlock>
+                <TextBlock Tag="y" Grid.Row="2" Grid.Column="3"></TextBlock>
 
                 <TextBlock Name="scaleTextBlock" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">100%</TextBlock>
                 <Slider Name="scaleSlider" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" 
@@ -149,6 +149,17 @@
             </Button>
             <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="ellipse">
                 <Ellipse Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Ellipse>
+            </Button>
+            <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="arc">
+                <Path Stroke="Black" StrokeThickness="1">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure IsClosed="False" StartPoint="0,0">
+                                <ArcSegment Point="30,30" Size="30,30" />
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
             </Button>
             <Button Background="Transparent" Height="50" Click="ToolButton_Click" Tag="rectangle">
                 <Rectangle Stroke="Black" StrokeThickness="1" Width="30" Height="30"></Rectangle>
