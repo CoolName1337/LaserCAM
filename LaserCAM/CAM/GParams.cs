@@ -17,7 +17,6 @@ namespace LaserCAM.CAM
                 if (arr[i].StartsWith("G01") || arr[i].StartsWith("G02"))
                     if (arr[i].Substring(3) == arr[i + 1].Substring(3))
                         arr[i + 1] = "";
-
             }
             arr = arr.Where(el => !string.IsNullOrWhiteSpace(el)).ToArray();
             res = string.Join("\n", arr);

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -100,13 +101,13 @@ namespace LaserCAM.CAM
                 var point = value;
 
                 _position = new Point(Math.Round(point.X, 2), Math.Round(point.Y, 2));
-                if (UseStep || Step == 0.0001)
+                if ((UseStep || Step == 0.0001) && !Keyboard.IsKeyDown(Key.LeftShift))
                     _position = new Point(
                         _position.X + GZeroPoint.Position.X % Step - _position.X % Step,
                         _position.Y + GZeroPoint.Position.Y % Step - _position.Y % Step
                         );
 
-                if(_isMouse)
+                if(_isMouse && !Keyboard.IsKeyDown(Key.LeftCtrl))
                     Binding();
 
                 UpdateTextBlocks();

@@ -102,9 +102,9 @@ namespace LaserCAM.CAM.GShapes
             {
                 var p = new Point(points[i].X, -points[i].Y + Bitmap.Height * kSize).Round(4);
                 if(pointStates[i] == GPointState.IsDot)
-                    strBuilder.AppendLine($"G00 X{p.X} Y{p.Y}\nG01 X{p.X} Y{p.Y}");
+                    strBuilder.Append($"G00 X{p.X} Y{p.Y}\nG01 X{p.X} Y{p.Y}\n");
                 else
-                    strBuilder.AppendLine($"{(pointStates[i] == GPointState.IsFirst ? "G00":"G01")} X{p.X} Y{p.Y}");
+                    strBuilder.Append($"{(pointStates[i] == GPointState.IsFirst ? "G00":"G01")} X{p.X} Y{p.Y}\n");
             }
             return strBuilder.ToString();
         }

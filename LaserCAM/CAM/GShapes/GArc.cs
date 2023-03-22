@@ -18,7 +18,11 @@ namespace LaserCAM.CAM.GShapes
         private double _radius;
         public GArc(Shape shape, Point point1, Point point2, double radius) : base(shape)
         {
-            double delta = Math.Round(Math.Abs((point1 - point2).Length)/2, 5, MidpointRounding.ToPositiveInfinity);
+            double delta = Math.Round(
+                    Math.Abs((point1 - point2).Length/2),
+                        2,
+                        MidpointRounding.ToPositiveInfinity
+                    );
             radius = radius < delta ? delta : radius;
 
             _point1 = new Point(point1.X, -point1.Y);

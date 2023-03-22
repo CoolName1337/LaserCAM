@@ -56,6 +56,7 @@ namespace LaserCAM
 
             string[] gSampleData = resultArray[0].Split("|");
             string[] GZeroPointData = resultArray[1].Split("|");
+
             mainWindow.SetSample(
                 double.Parse(gSampleData[0]), double.Parse(gSampleData[1]), 
                 new Point(
@@ -63,12 +64,15 @@ namespace LaserCAM
                     )
                 );
 
-            var listOfSerializedShapes = resultArray[2]
-                .Split(";", System.StringSplitOptions.RemoveEmptyEntries);
-            var listOfShapes = listOfSerializedShapes
-                .Select(str => GShape.FromSerialize(str))
-                .ToList();
-            listOfShapes.ForEach(shape => shape.Create());
+            if(resultArray.Length > 2)
+            {
+                var listOfSerializedShapes = resultArray[2]
+                    .Split(";", System.StringSplitOptions.RemoveEmptyEntries);
+                var listOfShapes = listOfSerializedShapes
+                    .Select(str => GShape.FromSerialize(str))
+                    .ToList();
+                listOfShapes.ForEach(shape => shape.Create());
+            }
         }
 
         public static string GenerateGCode()

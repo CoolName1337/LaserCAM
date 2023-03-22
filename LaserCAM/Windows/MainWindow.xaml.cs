@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace LaserCAM
 {
@@ -20,7 +21,13 @@ namespace LaserCAM
             foreach (string key in GBindingParams.Params.Keys)
                 Resources.Add(key, GBindingParams.Params[key]);
             InitializeComponent();
+
             StartInitializing();
+
+            if (Environment.GetCommandLineArgs().Count() > 1)
+            {
+                FileExtensioner.OpenProject(Environment.GetCommandLineArgs()[1]);
+            }
         }
 
         public void StartInitializing()
@@ -29,7 +36,6 @@ namespace LaserCAM
             GField.Panel = canvasField;
             GTool.ParamsWindow = ParamsContainer;
             GCursor.ViewConatiner = ViewContainer;
-
             ReturnCommand.InputGestures.Add(new KeyGesture(Key.Z, ModifierKeys.Control));
         }
 
@@ -43,8 +49,8 @@ namespace LaserCAM
         {
             UnsetSample();
             GField.Sample = new GSample(w, h);
-            GZeroPoint.IsActive = true;
             GZeroPoint.Position = ZeroPoint;
+
             GField.MoveCanvas(new Point(mainCanvas.ActualWidth / 2, mainCanvas.ActualHeight / 2));
 
             ViewContainer.Visibility = Visibility.Visible;
@@ -64,7 +70,6 @@ namespace LaserCAM
             ParamsContainer.Visibility = Visibility.Hidden;
             FieldParamsPanel.Visibility = Visibility.Hidden;
             StartMask.Visibility = Visibility.Visible;
-            GZeroPoint.IsActive = false;
             GGrid.IsActive = false;
         }
 

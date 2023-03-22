@@ -69,6 +69,7 @@ namespace LaserCAM.CAM
 
         public static void ZoomOn(double kStep)
         {
+            GZeroPoint.Position = GZeroPoint.Position;
             KSize += scaleStep * kStep;
         }
 

@@ -40,7 +40,6 @@ namespace LaserCAM
         {
             ((MainWindow)Application.Current.MainWindow).SetSample(sampleRectangle.Width, sampleRectangle.Height);
             this.Close();
-
         }
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {

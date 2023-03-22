@@ -1,9 +1,6 @@
 ﻿using LaserCAM.CAM.GTools;
 using LaserCAM.Extensions;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Shapes;
 
 namespace LaserCAM.CAM.GShapes

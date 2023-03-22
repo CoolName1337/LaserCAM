@@ -5,7 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Icons\redan.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\redan.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
